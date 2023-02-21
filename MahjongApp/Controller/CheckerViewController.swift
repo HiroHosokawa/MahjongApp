@@ -6,3 +6,6 @@
 //
 
 import Foundation
+import UIKit
+
+class CheckerViewController: UIViewController {}
