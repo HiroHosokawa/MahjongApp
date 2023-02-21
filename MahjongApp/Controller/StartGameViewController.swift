@@ -14,6 +14,8 @@ class StartGameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBarButton()
+        
+        self.title = "スタート画面"
     }
     
     init() {
@@ -25,13 +27,22 @@ class StartGameViewController: UIViewController {
     }
     
     func setNavigationBarButton() {
-        let navigationBar = UINavigationBar()
-        navigationBar.frame = CGRect(x: 0, y: 50, width: 375, height: 0)
-        let navigationItem : UINavigationItem = UINavigationItem(title: "日付入力")
-        navigationBar.pushItem(navigationItem, animated: true)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action:nil)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(didTapSaveButton))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "リセット", style: .plain, target: self, action:nil)
-        self.view.addSubview(navigationBar)
+        
+        // TODO: 背景色をつける
+    }
+    
+    @objc private func didTapSaveButton(_ sender: UIBarButtonItem) {
+        // アラート表示
+        let vc = UIViewController()
+        vc.view.backgroundColor = .red
+        
+        self.present(vc, animated: true)
+//        self.navigationController?.pushViewController(vc, animated: true)
+        
+        // アラートのOKアクションの中でRealmに保存する処理を書く
+        
     }
     
 }

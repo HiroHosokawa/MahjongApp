@@ -23,10 +23,14 @@ class MainTabBarController: UITabBarController {
     }
     func settingTabBar() {
         let startGameViewController = StartGameViewController()
+        let startGameViewNav = UINavigationController(rootViewController: startGameViewController)
+        
         let gameDataViewController = GameDataViewController()
         let memberViewController = MemberViewController()
         let checkerViewController = CheckerViewController()
+        
         let systemViewController = SystemViewController()
+        let systemNav = UINavigationController(rootViewController: systemViewController)
         
         //        myTabBar.frame = CGRect(x: 0, y: height - tabBarHeight, width: width, height: tabBarHeight)
         //        myTabBar.barTintColor = UIColor(red: 244/255, green: 178/255, blue: 64/255, alpha: 1.0)
@@ -38,11 +42,18 @@ class MainTabBarController: UITabBarController {
         memberViewController.tabBarItem = UITabBarItem(title: "面子", image: UIImage(named: "memberIcon"), tag: 3)
         checkerViewController.tabBarItem = UITabBarItem(title: "チェッカー", image: UIImage(named: "checkIcon"), tag: 4)
         systemViewController.tabBarItem = UITabBarItem(title: "設定", image: UIImage(named: "systemIcon"), tag: 5)
-        viewControllers = [startGameViewController,gameDataViewController,memberViewController,checkerViewController,systemViewController]
         
-        UITabBar.appearance().barTintColor = UIColor(red: 244/255, green: 178/255, blue: 64/255, alpha: 1.0)
-        UITabBar.appearance().tintColor = UIColor(red: 103/255, green: 190/255, blue: 141/255, alpha: 1.0)
+        viewControllers = [startGameViewNav,gameDataViewController,memberViewController,checkerViewController,systemNav]
         
+//        UITabBar.appearance().barTintColor = UIColor(red: 244/255, green: 178/255, blue: 64/255, alpha: 1.0)
+        //        UITabBar.appearance().tintColor = UIColor(red: 103/255, green: 190/255, blue: 141/255, alpha: 1.0)
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.backgroundColor = UIColor(red: 244/255, green: 178/255, blue: 64/255, alpha: 1.0)
+        self.tabBar.standardAppearance = tabBarAppearance
+        
+        if #available(iOS 15.0, *) {
+            self.tabBar.scrollEdgeAppearance = tabBarAppearance
+        }
     }
     
 }

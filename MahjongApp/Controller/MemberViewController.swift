@@ -47,11 +47,16 @@ class MemberViewController: UIViewController {
             textField.placeholder = "４文字以内"
             
         })
-        let add = UIAlertAction(title: "追加", style: .default, handler: { (action) -> Void in
-            if let password = alert.textFields?.first?.text {
-                print("Password: \(password)")
-            }
+        
+        let add = UIAlertAction(
+            title: "追加",
+            style: .default,
+            handler: { (action) -> Void in
+            print("OK")
+                
+                alert.textFields?.first
         })
+        
         let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
             print("Cancel button tapped")
         })
