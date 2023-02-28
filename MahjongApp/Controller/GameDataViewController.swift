@@ -18,14 +18,12 @@ class GameDataViewController: UIViewController {
         tableView.register(
             UINib(nibName: "GameDataTableViewCell", bundle: nil), forCellReuseIdentifier: "GameDataTableViewCell")
         setNavigationBarButton()
+        self.title = "対局履歴"
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     func setNavigationBarButton() {
-        let navigationBar = UINavigationBar()
-        navigationBar.frame = CGRect(x: 0, y: 50, width: 375, height: 0)
-        let navigationItem : UINavigationItem = UINavigationItem(title: "対局一覧")
-        navigationBar.pushItem(navigationItem, animated: true)
-        self.view.addSubview(navigationBar)
+        
     }
 }
 

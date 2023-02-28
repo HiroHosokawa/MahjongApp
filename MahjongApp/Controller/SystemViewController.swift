@@ -10,18 +10,20 @@ import UIKit
 
 class SystemViewController: UIViewController {
     
-    let informationitem: NSArray = ["バージョン　〇〇"]
-    let dataItem: NSArray = ["初期化","データダウンロード"]
-    let inquiryItem: NSArray = ["メールでの問い合わせ"]
-    let systemSection: NSArray = ["情報","データ","問い合わせ"]
+    let informationitem: [String] = ["バージョン　〇〇"]
+    let dataItem: [String] = ["初期化","データダウンロード"]
+    let inquiryItem: [String] = ["メールでの問い合わせ"]
+    let systemSection: [String] = ["情報","データ","問い合わせ"]
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //        tableView.delegate = self
-        //        tableView.dataSource = self
-        //        setTableView()
+                tableView.dataSource = self
+                setTableView()
+        self.title = "設定"
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     func setTableView() {
@@ -35,8 +37,20 @@ class SystemViewController: UIViewController {
 }
 
 extension SystemViewController: UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return systemSection.count
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        titleForHeaderInSection section: Int
+    ) -> String? {
+        return systemSection[section]
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Mycell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath)
         if indexPath.section == 0 {
             cell.textLabel?.text = "\(informationitem[indexPath.row])"
         } else if indexPath.section == 1 {
@@ -59,3 +73,4 @@ extension SystemViewController: UITableViewDataSource {
         }
     }
 }
+

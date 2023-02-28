@@ -10,6 +10,7 @@ import UIKit
 import RealmSwift
 
 var addButtonItem: UIBarButtonItem!
+let userData = UserData()
 
 class MemberViewController: UIViewController {
     
@@ -19,19 +20,26 @@ class MemberViewController: UIViewController {
         super.viewDidLoad()
         setNavigationBarButton()
         tableView.dataSource = self
-        addUser()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setUserData()
+        tableView.reloadData()
         
     }
     
     func setNavigationBarButton() {
         let navigationBar = UINavigationBar()
         
-        navigationBar.frame = CGRect(x: 0, y: 50, width: 375, height: 0)
-        let navigationItem : UINavigationItem = UINavigationItem(title: "面子一覧")
-        navigationBar.pushItem(navigationItem, animated: true)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "追加", style: .plain, target: self, action: nil)
+        self.title = "面子一覧"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "追加", style: .plain, target: self, action: #selector(didTapAddButton))
         self.view.addSubview(navigationBar)
     }
+    
+     
     
     func setUserData() {
         let realm = try! Realm()
@@ -41,17 +49,32 @@ class MemberViewController: UIViewController {
     
     var userDataList: [UserData] = []
     
-    func addUser() {
+    @objc func didTapAddButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "面子の追加", message: "名前を入力してください。", preferredStyle: .alert)
         alert.addTextField(configurationHandler: { textField in
             textField.placeholder = "４文字以内"
             
         })
-        let add = UIAlertAction(title: "追加", style: .default, handler: { (action) -> Void in
-            if let password = alert.textFields?.first?.text {
-                print("Password: \(password)")
-            }
-        })
+        let add = UIAlertAction(
+            title: "追加",
+            style: .default,
+            handler: { (action) -> Void in
+                print("OK")
+                if let textFieldInAlert = alert.textFields?.first {
+                    
+                    userData.userName = textFieldInAlert.text ?? ""
+                    print(userData.userName)
+                    
+                    do{
+                        let realm = try Realm()
+                        try realm.write({ () -> Void in
+                            realm.add(userData)
+                        })
+                    }catch{
+                    }
+                    
+                }
+            })
         let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
             print("Cancel button tapped")
         })
@@ -64,12 +87,31 @@ class MemberViewController: UIViewController {
 extension MemberViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userDataList.count
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-        //            let userData: UserData = userDataList[indexPath.row]
-        //            cell.userName.text = userData.text
+//         = userDataList[indexPath.row]
         return cell
     }
 }
+
+extension MemberViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath){
+        if(editingStyle == UITableViewCell.EditingStyle.delete) {
+            
+            do{
+                let realm = try Realm()
+                try realm.write {
+                    realm.delete(self.userDataList[indexPath.row])
+                }
+                userDataList.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+            }catch{
+            }
+        }
+    }
+}
+

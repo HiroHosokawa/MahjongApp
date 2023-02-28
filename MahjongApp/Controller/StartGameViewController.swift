@@ -11,9 +11,18 @@ import UIKit
 
 class StartGameViewController: UIViewController {
     
+   
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBarButton()
+        self.title = "日付入力"
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        let nib = UINib(nibName: "StartGameCollectionViewCell", bundle: nil)
+                collectionView!.register(nib, forCellWithReuseIdentifier: "StartGameCollectionViewCell")
+            
     }
     
     init() {
@@ -25,13 +34,74 @@ class StartGameViewController: UIViewController {
     }
     
     func setNavigationBarButton() {
-        let navigationBar = UINavigationBar()
-        navigationBar.frame = CGRect(x: 0, y: 50, width: 375, height: 0)
-        let navigationItem : UINavigationItem = UINavigationItem(title: "日付入力")
-        navigationBar.pushItem(navigationItem, animated: true)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action:nil)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "リセット", style: .plain, target: self, action:nil)
-        self.view.addSubview(navigationBar)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(didTapSaveButton))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "リセット", style: .plain, target: self, action: #selector(didTapResetButton))
+
     }
+    @objc func didTapSaveButton(_ sender: UIBarButtonItem) {
+        let alert = UIAlertController(
+            title: "対局の終了",
+            message: "対局を保存して終了します。よろしいですか？",
+            preferredStyle: .alert)
+        
+        let add = UIAlertAction(
+            title: "保存",
+            style: .default,
+            handler: { (action) -> Void in
+                print("OK")
+        })
+        let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
+            print("Cancel button tapped")
+        })
+        alert.addAction(add);
+        alert.addAction(cancel);
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func didTapResetButton(_ sender: UIBarButtonItem) {
+        let alert = UIAlertController(
+            title: "データの消去",
+            message: "現在のページを白紙に戻します。よろしいですか？",
+            preferredStyle: .alert)
+        
+        let add = UIAlertAction(
+            title: "リセット",
+            style: .default,
+            handler: { (action) -> Void in
+                print("OK")
+        })
+        let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
+            print("Cancel button tapped")
+        })
+        alert.addAction(add);
+        alert.addAction(cancel);
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+}
+
+extension StartGameViewController: UICollectionViewDelegate {
+//    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//            return 2
+//        }
+}
+
+extension StartGameViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        //CustumCellを宣言する
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StartGameCollectionViewCell", for: indexPath) as! StartGameCollectionViewCell
+                //色々いじる
+                cell.setText("Hello")
+                cell.setBackgroundColor(.lightGray)
+                
+                return cell
+    }
+    
     
 }

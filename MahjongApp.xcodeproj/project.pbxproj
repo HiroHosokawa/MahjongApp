@@ -30,6 +30,8 @@
 		E9DE94EE29A07C4F000354C1 /* CheckerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E9DE94ED29A07C4F000354C1 /* CheckerViewController.xib */; };
 		E9DE94F029A07C78000354C1 /* SystemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E9DE94EF29A07C78000354C1 /* SystemViewController.xib */; };
 		E9DE94F229A34167000354C1 /* GameDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DE94F129A34167000354C1 /* GameDataModel.swift */; };
+		E9DE94F429A8D2F3000354C1 /* StartGameCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DE94F329A8D2F3000354C1 /* StartGameCollectionViewCell.swift */; };
+		E9DE94F629A8D3C2000354C1 /* StartGameCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E9DE94F529A8D3C2000354C1 /* StartGameCollectionViewCell.xib */; };
 		F5DE5AA5F350DA4FADA7D926 /* Pods_MahjongAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE8B202D788649CBDC255BF8 /* Pods_MahjongAppTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +86,8 @@
 		E9DE94ED29A07C4F000354C1 /* CheckerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CheckerViewController.xib; sourceTree = "<group>"; };
 		E9DE94EF29A07C78000354C1 /* SystemViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SystemViewController.xib; sourceTree = "<group>"; };
 		E9DE94F129A34167000354C1 /* GameDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDataModel.swift; sourceTree = "<group>"; };
+		E9DE94F329A8D2F3000354C1 /* StartGameCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameCollectionViewCell.swift; sourceTree = "<group>"; };
+		E9DE94F529A8D3C2000354C1 /* StartGameCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartGameCollectionViewCell.xib; sourceTree = "<group>"; };
 		F42DA6AE29F753368E4F8B70 /* Pods_MahjongApp_MahjongAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MahjongApp_MahjongAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -196,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				E9DE94E729A071C6000354C1 /* StartGameViewController.xib */,
+				E9DE94F529A8D3C2000354C1 /* StartGameCollectionViewCell.xib */,
 				E9AF3229299C897900F67EBD /* GameDataTableViewCell.xib */,
 				E9DE94E929A079F2000354C1 /* GameDataViewController.xib */,
 				E9DE94EB29A07C3D000354C1 /* MemberViewController.xib */,
@@ -210,6 +215,7 @@
 			children = (
 				E9AF31632994EC8600F67EBD /* MainTabBarController.swift */,
 				E9AF318F2998FB3300F67EBD /* StartGameViewController.swift */,
+				E9DE94F329A8D2F3000354C1 /* StartGameCollectionViewCell.swift */,
 				E9AF31912999E01700F67EBD /* GameDataViewController.swift */,
 				E9AF3227299C88E200F67EBD /* GameDataTableViewCell.swift */,
 				E9AF319F2999F05200F67EBD /* MemberViewController.swift */,
@@ -343,6 +349,7 @@
 				E9DE94EA29A079F2000354C1 /* GameDataViewController.xib in Resources */,
 				E9DE94F029A07C78000354C1 /* SystemViewController.xib in Resources */,
 				E9AF322A299C897900F67EBD /* GameDataTableViewCell.xib in Resources */,
+				E9DE94F629A8D3C2000354C1 /* StartGameCollectionViewCell.xib in Resources */,
 				E9DE94E829A071C6000354C1 /* StartGameViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -481,6 +488,7 @@
 				E9DE94F229A34167000354C1 /* GameDataModel.swift in Sources */,
 				E9AF31622994EC8600F67EBD /* SceneDelegate.swift in Sources */,
 				E9AF31922999E01700F67EBD /* GameDataViewController.swift in Sources */,
+				E9DE94F429A8D2F3000354C1 /* StartGameCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
