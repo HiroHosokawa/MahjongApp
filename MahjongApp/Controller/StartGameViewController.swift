@@ -21,7 +21,9 @@ class StartGameViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         let nib = UINib(nibName: "StartGameCollectionViewCell", bundle: nil)
-                collectionView!.register(nib, forCellWithReuseIdentifier: "StartGameCollectionViewCell")
+                collectionView!.register(nib, forCellWithReuseIdentifier: "Cell")
+        
+        
             
     }
     
@@ -82,9 +84,12 @@ class StartGameViewController: UIViewController {
 }
 
 extension StartGameViewController: UICollectionViewDelegate {
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//            return 2
-//        }
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+            return 1
+        }
+    
+
+    
 }
 
 extension StartGameViewController: UICollectionViewDataSource {
@@ -95,13 +100,28 @@ extension StartGameViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //CustumCellを宣言する
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StartGameCollectionViewCell", for: indexPath) as! StartGameCollectionViewCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
                 //色々いじる
                 cell.setText("Hello")
                 cell.setBackgroundColor(.lightGray)
                 
                 return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            //遷移内容を記載？
+        }
+}
+
+extension StartGameViewController: UICollectionViewDelegateFlowLayout {
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width: CGFloat = UIScreen.main.bounds.width / 5.572
+        let height: CGFloat = UIScreen.main.bounds.height / 20
+        return CGSize(width: width, height: height)
+    }
+    
     
     
 }

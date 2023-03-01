@@ -10,18 +10,18 @@ import Foundation
 
 class StartGameCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var machName: UILabel!
+    @IBOutlet weak var matchName: UILabel!
     
     override func prepareForReuse() {
             contentView.backgroundColor = .lightGray
         }
         
         func setText(_ text: String?) {
-            machName.text = text
+            matchName.text = text
         }
         
         func setBackgroundColor(_ color: UIColor) {
             contentView.backgroundColor = color
-        }
+        }    
     }
 

@@ -1,20 +1,20 @@
 //
-//  MemberViewController.swift
+//  SelectUserViewController.swift
 //  MahjongApp
 //
-//  Created by 細川比呂 on 2023/02/13.
+//  Created by 細川比呂 on 2023/03/01.
 //
 
 import Foundation
 import UIKit
 import RealmSwift
 
-var addButtonItem: UIBarButtonItem!
-let userData = UserData()
 
-class MemberViewController: UIViewController {
+
+class SelectUserViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +33,7 @@ class MemberViewController: UIViewController {
     func setNavigationBarButton() {
         let navigationBar = UINavigationBar()
         
-        self.title = "面子一覧"
+        self.title = "メンバーを選択してください"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "追加", style: .plain, target: self, action: #selector(didTapAddButton))
         self.view.addSubview(navigationBar)
@@ -84,7 +84,7 @@ class MemberViewController: UIViewController {
     }
 }
 
-extension MemberViewController: UITableViewDataSource {
+extension SelectUserViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userDataList.count
         
@@ -102,7 +102,7 @@ extension MemberViewController: UITableViewDataSource {
         }
 }
 
-extension MemberViewController: UITableViewDelegate {
+extension SelectUserViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath){
         if(editingStyle == UITableViewCell.EditingStyle.delete) {
@@ -119,4 +119,5 @@ extension MemberViewController: UITableViewDelegate {
         }
     }
 }
+
 
