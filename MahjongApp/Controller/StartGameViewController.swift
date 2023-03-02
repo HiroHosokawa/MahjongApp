@@ -10,7 +10,8 @@ import UIKit
 
 
 class StartGameViewController: UIViewController {
-    
+     let matchMember: [String] = ["あなた", "メンバー１", "メンバー２", "メンバー３", "メンバー４", ]
+
    
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -80,6 +81,10 @@ class StartGameViewController: UIViewController {
         alert.addAction(cancel);
         self.present(alert, animated: true, completion: nil)
     }
+//    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+//
+//            return 0.0
+//      }
     
 }
 
@@ -109,8 +114,25 @@ extension StartGameViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            //遷移内容を記載？
-        }
+            //パターン１
+//        func moveNextVC(indexPath: IndexPath) {
+//                let itemName = matchMember[indexPath.item]
+//                let selectUserVC = SelectUserViewController(name: "メンバーを選択してください")
+//                present(selectUserVC, animated: true, completion: nil)
+//            }
+//       パターン２
+//         let vc = SelectUserViewController(titleName: "メンバーを選択してください")
+//        navigationController?.pushViewController(vc, animated: true)
+        print("sender")
+//    }
+//        パターン３
+//         func nextPage(_ sender: UIButton) {
+//            let selectUserViewController = SelectUserViewController.init()
+//             navigationController?.pushViewController(selectUserViewController, animated: true)
+//             print("sender")
+//        }
+    }
+    
 }
 
 extension StartGameViewController: UICollectionViewDelegateFlowLayout {
@@ -121,6 +143,8 @@ extension StartGameViewController: UICollectionViewDelegateFlowLayout {
         let height: CGFloat = UIScreen.main.bounds.height / 20
         return CGSize(width: width, height: height)
     }
+    
+    
     
     
     

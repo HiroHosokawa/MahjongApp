@@ -9,11 +9,13 @@ import Foundation
 import UIKit
 import RealmSwift
 
-
+let selectUserViewController = SelectUserViewController()
+let SelectUserNav = UINavigationController(rootViewController: selectUserViewController)
 
 class SelectUserViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    
     
     
     override func viewDidLoad() {
