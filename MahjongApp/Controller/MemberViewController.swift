@@ -39,8 +39,6 @@ class MemberViewController: UIViewController {
         self.view.addSubview(navigationBar)
     }
     
-     
-    
     func setUserData() {
         let realm = try! Realm()
         let result = realm.objects(UserData.self)
@@ -119,4 +117,3 @@ extension MemberViewController: UITableViewDelegate {
         }
     }
 }
-

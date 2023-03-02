@@ -23,9 +23,7 @@ class StartGameViewController: UIViewController {
         collectionView.delegate = self
         let nib = UINib(nibName: "StartGameCollectionViewCell", bundle: nil)
                 collectionView!.register(nib, forCellWithReuseIdentifier: "Cell")
-        
-        
-            
+   
     }
     
     init() {
@@ -92,9 +90,6 @@ extension StartGameViewController: UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
             return 1
         }
-    
-
-    
 }
 
 extension StartGameViewController: UICollectionViewDataSource {
@@ -114,25 +109,11 @@ extension StartGameViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            //パターン１
-//        func moveNextVC(indexPath: IndexPath) {
-//                let itemName = matchMember[indexPath.item]
-//                let selectUserVC = SelectUserViewController(name: "メンバーを選択してください")
-//                present(selectUserVC, animated: true, completion: nil)
-//            }
-//       パターン２
-//         let vc = SelectUserViewController(titleName: "メンバーを選択してください")
-//        navigationController?.pushViewController(vc, animated: true)
-        print("sender")
-//    }
-//        パターン３
-//         func nextPage(_ sender: UIButton) {
-//            let selectUserViewController = SelectUserViewController.init()
-//             navigationController?.pushViewController(selectUserViewController, animated: true)
-//             print("sender")
-//        }
+        let vc = SelectUserViewController()
+        vc.index = indexPath
+        vc.delegate = self
+        navigationController?.pushViewController(vc, animated: true)
     }
-    
 }
 
 extension StartGameViewController: UICollectionViewDelegateFlowLayout {
@@ -143,9 +124,11 @@ extension StartGameViewController: UICollectionViewDelegateFlowLayout {
         let height: CGFloat = UIScreen.main.bounds.height / 20
         return CGSize(width: width, height: height)
     }
-    
-    
-    
-    
-    
+}
+
+extension StartGameViewController: SelectUserViewControllerDelegate {
+    func selectUserViewController(user: UserData, index: IndexPath) {
+        print(user)
+        print(index)
+    }
 }

@@ -9,27 +9,28 @@ import Foundation
 import UIKit
 import RealmSwift
 
-let selectUserViewController = SelectUserViewController()
-let SelectUserNav = UINavigationController(rootViewController: selectUserViewController)
+protocol SelectUserViewControllerDelegate: AnyObject {
+    func selectUserViewController(user: UserData, index: IndexPath)
+}
 
 class SelectUserViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    
+    weak var delegate: SelectUserViewControllerDelegate?
+    var index: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBarButton()
         tableView.dataSource = self
-        
+        tableView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setUserData()
         tableView.reloadData()
-        
     }
     
     func setNavigationBarButton() {
@@ -40,8 +41,6 @@ class SelectUserViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "追加", style: .plain, target: self, action: #selector(didTapAddButton))
         self.view.addSubview(navigationBar)
     }
-    
-     
     
     func setUserData() {
         let realm = try! Realm()
@@ -106,6 +105,16 @@ extension SelectUserViewController: UITableViewDataSource {
 
 extension SelectUserViewController: UITableViewDelegate {
     
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        let user = userDataList[indexPath.row]
+        delegate?.selectUserViewController(user: user, index: index!)
+        
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath){
         if(editingStyle == UITableViewCell.EditingStyle.delete) {
             
@@ -120,6 +129,7 @@ extension SelectUserViewController: UITableViewDelegate {
             }
         }
     }
+    
 }
 
 
