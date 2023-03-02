@@ -10,9 +10,8 @@ import UIKit
 
 
 class StartGameViewController: UIViewController {
-     let matchMember: [String] = ["あなた", "メンバー１", "メンバー２", "メンバー３", "メンバー４", ]
-
-   
+    var matchMember: [String] = ["A", "B", "C", "D", "E"]
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewDidLoad() {
@@ -22,10 +21,8 @@ class StartGameViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         let nib = UINib(nibName: "StartGameCollectionViewCell", bundle: nil)
-                collectionView!.register(nib, forCellWithReuseIdentifier: "Cell")
+        collectionView!.register(nib, forCellWithReuseIdentifier: "Cell")
         
-        
-            
     }
     
     init() {
@@ -40,7 +37,7 @@ class StartGameViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(didTapSaveButton))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "リセット", style: .plain, target: self, action: #selector(didTapResetButton))
-
+        
     }
     @objc func didTapSaveButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(
@@ -53,7 +50,7 @@ class StartGameViewController: UIViewController {
             style: .default,
             handler: { (action) -> Void in
                 print("OK")
-        })
+            })
         let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
             print("Cancel button tapped")
         })
@@ -73,7 +70,7 @@ class StartGameViewController: UIViewController {
             style: .default,
             handler: { (action) -> Void in
                 print("OK")
-        })
+            })
         let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
             print("Cancel button tapped")
         })
@@ -81,71 +78,57 @@ class StartGameViewController: UIViewController {
         alert.addAction(cancel);
         self.present(alert, animated: true, completion: nil)
     }
-//    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-//
-//            return 0.0
-//      }
+    //    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+    //
+    //            return 0.0
+    //      }
     
 }
 
 extension StartGameViewController: UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-            return 1
-        }
-    
-
-    
+        return 1
+    }
 }
 
 extension StartGameViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return matchMember.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //CustumCellを宣言する
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
-                //色々いじる
-                cell.setText("Hello")
-                cell.setBackgroundColor(.lightGray)
-                
-                return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
+        let username = matchMember[indexPath.row]
+        //色々いじる
+        cell.setText(username)
+        cell.setBackgroundColor(.lightGray)
+        
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            //パターン１
-//        func moveNextVC(indexPath: IndexPath) {
-//                let itemName = matchMember[indexPath.item]
-//                let selectUserVC = SelectUserViewController(name: "メンバーを選択してください")
-//                present(selectUserVC, animated: true, completion: nil)
-//            }
-//       パターン２
-//         let vc = SelectUserViewController(titleName: "メンバーを選択してください")
-//        navigationController?.pushViewController(vc, animated: true)
-        print("sender")
-//    }
-//        パターン３
-//         func nextPage(_ sender: UIButton) {
-//            let selectUserViewController = SelectUserViewController.init()
-//             navigationController?.pushViewController(selectUserViewController, animated: true)
-//             print("sender")
-//        }
+        let vc = SelectUserViewController()
+        vc.index = indexPath
+        vc.delegate = self
+        navigationController?.pushViewController(vc, animated: true)
     }
-    
 }
 
 extension StartGameViewController: UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let width: CGFloat = UIScreen.main.bounds.width / 5.572
         let height: CGFloat = UIScreen.main.bounds.height / 20
         return CGSize(width: width, height: height)
     }
-    
-    
-    
-    
-    
+}
+
+extension StartGameViewController: SelectUserViewControllerDelegate {
+    func selectUserViewController(user: UserData, index: IndexPath) {
+        matchMember[index.row] = user.userName
+        collectionView.reloadData()
+    }
 }
