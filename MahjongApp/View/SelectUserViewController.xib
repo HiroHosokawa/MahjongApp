@@ -8,7 +8,12 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SelectUserViewController" customModule="MahjongApp" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SelectUserViewController" customModule="MahjongApp" customModuleProvider="target">
+            <connections>
+                <outlet property="tableView" destination="8Hz-KT-ad7" id="Kea-XE-tyE"/>
+                <outlet property="view" destination="iN0-l3-epB" id="3ZA-hF-P0a"/>
+            </connections>
+        </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -27,9 +32,6 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="8Hz-KT-ad7" secondAttribute="bottom" id="Z9g-IX-thx"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="8Hz-KT-ad7" secondAttribute="trailing" id="jmD-8P-Q8p"/>
             </constraints>
-            <connections>
-                <outlet property="tableView" destination="8Hz-KT-ad7" id="AbR-B2-EYR"/>
-            </connections>
             <point key="canvasLocation" x="139" y="56"/>
         </view>
     </objects>

@@ -64,6 +64,7 @@ class MemberViewController: UIViewController {
                     
                     userData.userName = textFieldInAlert.text ?? ""
                     print(userData.userName)
+
                     
                     do{
                         let realm = try Realm()
@@ -81,6 +82,7 @@ class MemberViewController: UIViewController {
         alert.addAction(add);
         alert.addAction(cancel);
         self.present(alert, animated: true, completion: nil)
+        
     }
 }
 

@@ -9,39 +9,37 @@ import Foundation
 import UIKit
 import RealmSwift
 
-let selectUserViewController = SelectUserViewController()
-let SelectUserNav = UINavigationController(rootViewController: selectUserViewController)
+protocol SelectUserViewControllerDelegate: AnyObject {
+    func selectUserViewController(user: UserData, index: IndexPath)
+}
 
 class SelectUserViewController: UIViewController {
     
+    
     @IBOutlet weak var tableView: UITableView!
     
-    
+    weak var delegate: SelectUserViewControllerDelegate?
+    var index: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBarButton()
         tableView.dataSource = self
-        
+        tableView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setUserData()
         tableView.reloadData()
-        
     }
     
     func setNavigationBarButton() {
         let navigationBar = UINavigationBar()
-        
         self.title = "メンバーを選択してください"
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "追加", style: .plain, target: self, action: #selector(didTapAddButton))
         self.view.addSubview(navigationBar)
     }
-    
-     
     
     func setUserData() {
         let realm = try! Realm()
@@ -55,8 +53,8 @@ class SelectUserViewController: UIViewController {
         let alert = UIAlertController(title: "面子の追加", message: "名前を入力してください。", preferredStyle: .alert)
         alert.addTextField(configurationHandler: { textField in
             textField.placeholder = "４文字以内"
-            
         })
+        
         let add = UIAlertAction(
             title: "追加",
             style: .default,
@@ -77,6 +75,7 @@ class SelectUserViewController: UIViewController {
                     
                 }
             })
+        
         let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
             print("Cancel button tapped")
         })
@@ -89,7 +88,6 @@ class SelectUserViewController: UIViewController {
 extension SelectUserViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userDataList.count
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -105,6 +103,16 @@ extension SelectUserViewController: UITableViewDataSource {
 }
 
 extension SelectUserViewController: UITableViewDelegate {
+    
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        let user = userDataList[indexPath.row]
+        delegate?.selectUserViewController(user: user, index: index!)
+        
+        self.navigationController?.popViewController(animated: true)
+    }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath){
         if(editingStyle == UITableViewCell.EditingStyle.delete) {
