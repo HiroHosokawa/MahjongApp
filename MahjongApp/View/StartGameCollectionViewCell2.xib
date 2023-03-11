@@ -16,16 +16,18 @@
                 <rect key="frame" x="0.0" y="0.0" width="117" height="114"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b6A-h5-P6p">
-                        <rect key="frame" x="0.0" y="30" width="117" height="34"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits"/>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="100" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b6A-h5-P6p">
+                        <rect key="frame" x="0.0" y="0.0" width="117" height="114"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="77"/>
+                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                     </textField>
                 </subviews>
                 <constraints>
                     <constraint firstItem="b6A-h5-P6p" firstAttribute="leading" secondItem="fzi-n0-ekH" secondAttribute="leading" id="Jdb-MH-BeP"/>
+                    <constraint firstAttribute="bottom" secondItem="b6A-h5-P6p" secondAttribute="bottom" id="PI3-r6-XtH"/>
+                    <constraint firstItem="b6A-h5-P6p" firstAttribute="top" secondItem="fzi-n0-ekH" secondAttribute="top" id="UQj-Ky-czh"/>
+                    <constraint firstItem="b6A-h5-P6p" firstAttribute="centerY" secondItem="fzi-n0-ekH" secondAttribute="centerY" id="V4Y-WS-XX8"/>
                     <constraint firstAttribute="trailing" secondItem="b6A-h5-P6p" secondAttribute="trailing" id="cgw-dE-acT"/>
-                    <constraint firstItem="b6A-h5-P6p" firstAttribute="top" secondItem="fzi-n0-ekH" secondAttribute="top" constant="30" id="vEc-F6-Vsn"/>
                 </constraints>
             </collectionViewCellContentView>
             <size key="customSize" width="117" height="114"/>

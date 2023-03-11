@@ -37,7 +37,6 @@ class SystemViewController: UIViewController {
 }
 
 extension SystemViewController: UITableViewDataSource {
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return systemSection.count
     }

@@ -9,7 +9,6 @@ import UIKit
 
 class StartGameCollectionViewCell2: UICollectionViewCell {
     
-    
     @IBOutlet weak var inputScore: UITextField!
     
     let textField = UITextField()
@@ -17,6 +16,8 @@ class StartGameCollectionViewCell2: UICollectionViewCell {
     override func prepareForReuse() {
         contentView.backgroundColor = .blue
     }
+    
+    
     
     func setBackgroundColor(_ color: UIColor) {
         contentView.backgroundColor = color

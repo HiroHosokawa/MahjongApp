@@ -15,7 +15,6 @@ protocol SelectUserViewControllerDelegate: AnyObject {
 
 class SelectUserViewController: UIViewController {
     
-    
     @IBOutlet weak var tableView: UITableView!
     
     weak var delegate: SelectUserViewControllerDelegate?
@@ -61,10 +60,8 @@ class SelectUserViewController: UIViewController {
             handler: { (action) -> Void in
                 print("OK")
                 if let textFieldInAlert = alert.textFields?.first {
-                    
                     userData.userName = textFieldInAlert.text ?? ""
                     print(userData.userName)
-                    
                     do{
                         let realm = try Realm()
                         try realm.write({ () -> Void in
@@ -72,7 +69,6 @@ class SelectUserViewController: UIViewController {
                         })
                     }catch{
                     }
-                    
                 }
             })
         
@@ -91,32 +87,27 @@ extension SelectUserViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-            let user = userDataList[indexPath.row]
-            
-            var config = cell.defaultContentConfiguration()
-            config.text = user.userName
-            
-            cell.contentConfiguration = config
-            return cell
-        }
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        let user = userDataList[indexPath.row]
+        var config = cell.defaultContentConfiguration()
+        config.text = user.userName
+        cell.contentConfiguration = config
+        return cell
+    }
 }
 
 extension SelectUserViewController: UITableViewDelegate {
-    
     func tableView(
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
         let user = userDataList[indexPath.row]
         delegate?.selectUserViewController(user: user, index: index!)
-        
         self.navigationController?.popViewController(animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath){
         if(editingStyle == UITableViewCell.EditingStyle.delete) {
-            
             do{
                 let realm = try Realm()
                 try realm.write {

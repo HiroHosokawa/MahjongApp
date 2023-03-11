@@ -20,14 +20,12 @@ class MemberViewController: UIViewController {
         super.viewDidLoad()
         setNavigationBarButton()
         tableView.dataSource = self
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setUserData()
         tableView.reloadData()
-        
     }
     
     func setNavigationBarButton() {
@@ -38,8 +36,6 @@ class MemberViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "追加", style: .plain, target: self, action: #selector(didTapAddButton))
         self.view.addSubview(navigationBar)
     }
-    
-     
     
     func setUserData() {
         let realm = try! Realm()
@@ -53,7 +49,6 @@ class MemberViewController: UIViewController {
         let alert = UIAlertController(title: "面子の追加", message: "名前を入力してください。", preferredStyle: .alert)
         alert.addTextField(configurationHandler: { textField in
             textField.placeholder = "４文字以内"
-            
         })
         let add = UIAlertAction(
             title: "追加",
@@ -64,8 +59,6 @@ class MemberViewController: UIViewController {
                     
                     userData.userName = textFieldInAlert.text ?? ""
                     print(userData.userName)
-
-                    
                     do{
                         let realm = try Realm()
                         try realm.write({ () -> Void in
@@ -82,33 +75,27 @@ class MemberViewController: UIViewController {
         alert.addAction(add);
         alert.addAction(cancel);
         self.present(alert, animated: true, completion: nil)
-        
     }
 }
 
 extension MemberViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userDataList.count
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-            let user = userDataList[indexPath.row]
-            
-            var config = cell.defaultContentConfiguration()
-            config.text = user.userName
-            
-            cell.contentConfiguration = config
-            return cell
-        }
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        let user = userDataList[indexPath.row]
+        var config = cell.defaultContentConfiguration()
+        config.text = user.userName
+        cell.contentConfiguration = config
+        return cell
+    }
 }
 
 extension MemberViewController: UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath){
         if(editingStyle == UITableViewCell.EditingStyle.delete) {
-            
             do{
                 let realm = try Realm()
                 try realm.write {
