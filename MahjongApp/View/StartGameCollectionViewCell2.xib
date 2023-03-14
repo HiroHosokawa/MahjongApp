@@ -10,16 +10,16 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="fbS-7Q-ge1" customClass="StartGameCollectionViewCell2" customModule="MahjongApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="117" height="114"/>
+            <rect key="frame" x="0.0" y="0.0" width="117" height="60"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="fzi-n0-ekH">
-                <rect key="frame" x="0.0" y="0.0" width="117" height="114"/>
+                <rect key="frame" x="0.0" y="0.0" width="117" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="100" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b6A-h5-P6p">
-                        <rect key="frame" x="0.0" y="0.0" width="117" height="114"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="77"/>
-                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="b6A-h5-P6p">
+                        <rect key="frame" x="0.0" y="0.0" width="117" height="60"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="go"/>
                     </textField>
                 </subviews>
                 <constraints>
@@ -30,11 +30,11 @@
                     <constraint firstAttribute="trailing" secondItem="b6A-h5-P6p" secondAttribute="trailing" id="cgw-dE-acT"/>
                 </constraints>
             </collectionViewCellContentView>
-            <size key="customSize" width="117" height="114"/>
+            <size key="customSize" width="117" height="60"/>
             <connections>
                 <outlet property="inputScore" destination="b6A-h5-P6p" id="e86-Hw-0FT"/>
             </connections>
-            <point key="canvasLocation" x="157.24637681159422" y="-10.714285714285714"/>
+            <point key="canvasLocation" x="157.24637681159422" y="-28.794642857142854"/>
         </collectionViewCell>
     </objects>
 </document>

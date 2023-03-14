@@ -14,13 +14,16 @@ class StartGameCollectionViewCell2: UICollectionViewCell {
     let textField = UITextField()
     
     override func prepareForReuse() {
-        contentView.backgroundColor = .blue
+        textFieldLayout()
+        
     }
     
     
     
-    func setBackgroundColor(_ color: UIColor) {
-        contentView.backgroundColor = color
+    func textFieldLayout() {
+        textField.layer.cornerRadius = 0
+        textField.attributedPlaceholder = NSAttributedString(string: "placeholder text",
+                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
     }
 }
 

@@ -36,6 +36,8 @@
 		E9DE94FA29AEDD06000354C1 /* SelectUserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E9DE94F929AEDD06000354C1 /* SelectUserViewController.xib */; };
 		E9DE953A29B729FA000354C1 /* StartGameCollectionViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DE953929B729FA000354C1 /* StartGameCollectionViewCell2.swift */; };
 		E9DE953C29B72A37000354C1 /* StartGameCollectionViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = E9DE953B29B72A37000354C1 /* StartGameCollectionViewCell2.xib */; };
+		E9DE953E29C08DA1000354C1 /* TestCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DE953D29C08DA1000354C1 /* TestCollectionReusableView.swift */; };
+		E9DE954029C095F6000354C1 /* TestCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E9DE953F29C095F6000354C1 /* TestCollectionReusableView.xib */; };
 		F5DE5AA5F350DA4FADA7D926 /* Pods_MahjongAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE8B202D788649CBDC255BF8 /* Pods_MahjongAppTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -96,6 +98,8 @@
 		E9DE94F929AEDD06000354C1 /* SelectUserViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectUserViewController.xib; sourceTree = "<group>"; };
 		E9DE953929B729FA000354C1 /* StartGameCollectionViewCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameCollectionViewCell2.swift; sourceTree = "<group>"; };
 		E9DE953B29B72A37000354C1 /* StartGameCollectionViewCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartGameCollectionViewCell2.xib; sourceTree = "<group>"; };
+		E9DE953D29C08DA1000354C1 /* TestCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCollectionReusableView.swift; sourceTree = "<group>"; };
+		E9DE953F29C095F6000354C1 /* TestCollectionReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestCollectionReusableView.xib; sourceTree = "<group>"; };
 		F42DA6AE29F753368E4F8B70 /* Pods_MahjongApp_MahjongAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MahjongApp_MahjongAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -216,6 +220,7 @@
 				E9DE94EF29A07C78000354C1 /* SystemViewController.xib */,
 				E9DE94F929AEDD06000354C1 /* SelectUserViewController.xib */,
 				E9DE953B29B72A37000354C1 /* StartGameCollectionViewCell2.xib */,
+				E9DE953F29C095F6000354C1 /* TestCollectionReusableView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -226,13 +231,14 @@
 				E9AF31632994EC8600F67EBD /* MainTabBarController.swift */,
 				E9AF318F2998FB3300F67EBD /* StartGameViewController.swift */,
 				E9DE94F329A8D2F3000354C1 /* StartGameCollectionViewCell.swift */,
+				E9DE953929B729FA000354C1 /* StartGameCollectionViewCell2.swift */,
 				E9AF31912999E01700F67EBD /* GameDataViewController.swift */,
 				E9AF3227299C88E200F67EBD /* GameDataTableViewCell.swift */,
 				E9AF319F2999F05200F67EBD /* MemberViewController.swift */,
 				E9AF31A32999F0EE00F67EBD /* CheckerViewController.swift */,
 				E9AF31A12999F0A100F67EBD /* SystemViewController.swift */,
 				E9DE94F729AEDCD5000354C1 /* SelectUserViewController.swift */,
-				E9DE953929B729FA000354C1 /* StartGameCollectionViewCell2.swift */,
+				E9DE953D29C08DA1000354C1 /* TestCollectionReusableView.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -355,6 +361,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9DE953C29B72A37000354C1 /* StartGameCollectionViewCell2.xib in Resources */,
+				E9DE954029C095F6000354C1 /* TestCollectionReusableView.xib in Resources */,
 				E9DE94EC29A07C3D000354C1 /* MemberViewController.xib in Resources */,
 				E9DE94FA29AEDD06000354C1 /* SelectUserViewController.xib in Resources */,
 				E9DE94EE29A07C4F000354C1 /* CheckerViewController.xib in Resources */,
@@ -499,6 +506,7 @@
 				E9DE94F829AEDCD5000354C1 /* SelectUserViewController.swift in Sources */,
 				E9AF31A22999F0A100F67EBD /* SystemViewController.swift in Sources */,
 				E9AF31642994EC8600F67EBD /* MainTabBarController.swift in Sources */,
+				E9DE953E29C08DA1000354C1 /* TestCollectionReusableView.swift in Sources */,
 				E9AF3228299C88E200F67EBD /* GameDataTableViewCell.swift in Sources */,
 				E9AF31602994EC8600F67EBD /* AppDelegate.swift in Sources */,
 				E9DE94F229A34167000354C1 /* GameDataModel.swift in Sources */,

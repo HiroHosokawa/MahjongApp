@@ -16,12 +16,12 @@ class StartGameCollectionViewCell: UICollectionViewCell {
     let label = UILabel()
     
     override func prepareForReuse() {
-            contentView.backgroundColor = .lightGray
+            
         }
         
         func setText(_ text: String?) {
             matchName.text = text
-            label.text = text
+            
         }
         
         func setBackgroundColor(_ color: UIColor) {
