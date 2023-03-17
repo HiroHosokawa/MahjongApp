@@ -12,14 +12,20 @@ class UserData: Object {
     @objc dynamic var userName = ""
 }
 
-//class Match: Object {
+class MatchData: Object {
+@objc dynamic var id: String = ""
+//    var members: List<UserData>
+     var scoreList: [String] = []
+//   var date: Date
+}
 //
-//}
+class ScoreData: Object {
+//    var id: String = ""
+   @objc dynamic var score: String = ""
+//    var order: Int = 0
+//    var authorID: String = ""
+}
 //
-//class Score: Object {
-//
-//}
-
 //class CheckData: Object {
 //    var ronCount: Int = 0
 //    var tsumoCount: Int = 0

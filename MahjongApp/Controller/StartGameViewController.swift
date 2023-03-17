@@ -10,7 +10,11 @@ import UIKit
 
 class StartGameViewController: UIViewController {
     var matchMember: [String] = ["あなた", "A", "B", "C", "D", ]
-    var collectionViewSection: [String] = ["合計","チップ入力欄","スコア入力欄"]
+    var collectionViewSection: [String] = ["対局メンバー","合計"]
+    var collectionViewSection2: [String] = ["チップ入力欄","スコア入力欄"]
+    let scoreData = ScoreData()
+    let matchData = MatchData()
+    
     let startGameCollectionViewCell2 = StartGameCollectionViewCell2()
     
     
@@ -44,6 +48,7 @@ class StartGameViewController: UIViewController {
         let nib2 = UINib(nibName: "StartGameCollectionViewCell2", bundle: nil)
         collectionView2!.register(nib2, forCellWithReuseIdentifier: "Cell2")
         let nib3 = UINib(nibName: "TestCollectionReusableView", bundle: nil)
+        collectionView!.register(nib3, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader")
         collectionView2!.register(nib3, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader")
         configureinputScoreTextFIeld()
         
@@ -68,20 +73,20 @@ class StartGameViewController: UIViewController {
     
     
     
-            func configureinputScoreTextFIeld() {
-                startGameCollectionViewCell2.textField.inputAccessoryView = toolBar
-            }
+    func configureinputScoreTextFIeld() {
+        startGameCollectionViewCell2.textField.inputAccessoryView = toolBar
+    }
     
-            @objc func didTupDone() {
-                view.endEditing(true)
-            }
-            var toolBar: UIToolbar {
-                let toolBarRect = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35)
-                let toolBar = UIToolbar(frame: toolBarRect)
-                let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTupDone))
-                toolBar.setItems([doneItem], animated: true)
-                return toolBar
-            }
+    @objc func didTupDone() {
+        view.endEditing(true)
+    }
+    var toolBar: UIToolbar {
+        let toolBarRect = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35)
+        let toolBar = UIToolbar(frame: toolBarRect)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTupDone))
+        toolBar.setItems([doneItem], animated: true)
+        return toolBar
+    }
     
     @objc func didTapSaveButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(
@@ -129,9 +134,9 @@ class StartGameViewController: UIViewController {
 extension StartGameViewController: UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if collectionView.tag == 0 {
-            return 1
-        }else if collectionView2.tag == 1 {
             return collectionViewSection.count
+        }else if collectionView2.tag == 1 {
+            return collectionViewSection2.count
         }else {
             return 2
         }
@@ -141,14 +146,22 @@ extension StartGameViewController: UICollectionViewDelegate {
 extension StartGameViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView.tag == 0 {
-            return 5
+            switch(section){
+            case 0:
+                return 5
+            case 1:
+                return 5
+            default:
+                print("error")
+                return 0
+            }
         }else  {
             switch(section){
             case 0:
                 return 5
                 
             case 1:
-                return 5
+                return 1000
                 
             case 2:
                 return 1000
@@ -171,14 +184,28 @@ extension StartGameViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView.tag == 0 {
+            switch(indexPath.section){
+            case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
             let username = matchMember[indexPath.row]
             //色々いじる
             cell.setText(username)
             cell.setBackgroundColor(.lightGray)
             return cell
+            case 1:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
+                let sumScore: String = "合計値"
+                cell.setText(sumScore)
+                return cell
+                
+            default:
+                return UICollectionViewCell()
+            }
         }else  {
             let cell = collectionView2.dequeueReusableCell(withReuseIdentifier: "Cell2", for: indexPath) as! StartGameCollectionViewCell2
+            scoreData.score = startGameCollectionViewCell2.textField.text ?? ""
+            matchData.scoreList.insert(scoreData.score, at: indexPath.row)
+            print(scoreData.score)
             return cell
         }
     }
@@ -212,12 +239,18 @@ extension StartGameViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-            
-             let Header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader", for: indexPath) as! TestCollectionReusableView 
-            Header.sectionLabel.text = collectionViewSection[indexPath.section]
-            return Header
+        if collectionView.tag == 0 {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader", for: indexPath) as! TestCollectionReusableView
+            header.sectionLabel.text = collectionViewSection[indexPath.section]
+            return header
+        }else if collectionView2.tag == 1 {
+            let header = collectionView2.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader", for: indexPath) as! TestCollectionReusableView
+            header.sectionLabel.text = collectionViewSection2[indexPath.section]
+            return header
         }
+        return UICollectionReusableView()
     }
+}
 
 
 
@@ -288,6 +321,10 @@ extension StartGameViewController: UICollectionViewDelegateFlowLayout {
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
         return 0
+    }
+    
+     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    return CGSize(width: self.view.bounds.width, height: 30)
     }
 }
 

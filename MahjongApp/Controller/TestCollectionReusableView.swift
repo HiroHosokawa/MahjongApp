@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TestCollectionReusableView: UICollectionViewCell {
+class TestCollectionReusableView: UICollectionReusableView {
     
     @IBOutlet weak var sectionLabel: UILabel!
     

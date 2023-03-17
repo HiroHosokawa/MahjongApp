@@ -21,10 +21,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="JGW-wu-dqX">
-                    <rect key="frame" x="0.0" y="44" width="414" height="50"/>
+                    <rect key="frame" x="0.0" y="74" width="414" height="150"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="50" id="11m-Qf-PqH"/>
+                        <constraint firstAttribute="height" constant="150" id="11m-Qf-PqH"/>
                     </constraints>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ciq-2I-dxw">
                         <size key="itemSize" width="128" height="128"/>
@@ -34,7 +34,7 @@
                     </collectionViewFlowLayout>
                 </collectionView>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="7uc-5P-ptc">
-                    <rect key="frame" x="0.0" y="124" width="414" height="738"/>
+                    <rect key="frame" x="0.0" y="224" width="414" height="638"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Mtv-nM-bKv">
                         <size key="itemSize" width="128" height="128"/>
@@ -47,11 +47,11 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="JGW-wu-dqX" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="I30-6m-9Ge"/>
+                <constraint firstItem="JGW-wu-dqX" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="30" id="I30-6m-9Ge"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="7uc-5P-ptc" secondAttribute="bottom" id="M48-G9-iL0"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="7uc-5P-ptc" secondAttribute="trailing" id="NfP-qT-HEU"/>
                 <constraint firstItem="JGW-wu-dqX" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="OGU-Yh-XZ2"/>
-                <constraint firstItem="7uc-5P-ptc" firstAttribute="top" secondItem="JGW-wu-dqX" secondAttribute="bottom" constant="30" id="UEr-E2-Y2d"/>
+                <constraint firstItem="7uc-5P-ptc" firstAttribute="top" secondItem="JGW-wu-dqX" secondAttribute="bottom" id="UEr-E2-Y2d"/>
                 <constraint firstItem="JGW-wu-dqX" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Xjg-O4-Dbt"/>
                 <constraint firstItem="7uc-5P-ptc" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="gN9-0Z-rQn"/>
             </constraints>
