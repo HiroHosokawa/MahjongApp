@@ -10,9 +10,11 @@ import UIKit
 
 class StartGameViewController: UIViewController {
     var matchMember: [String] = ["あなた", "A", "B", "C", "D", ]
+    var matchMember2: [String] = ["あなた", "A", "B", "C", "D", ]
     var collectionViewSection: [String] = ["対局メンバー","合計"]
     var collectionViewSection2: [String] = ["チップ入力欄","スコア入力欄"]
     let scoreData = ScoreData()
+    var scoreList: [Any] = []
     let matchData = MatchData()
     
     let startGameCollectionViewCell2 = StartGameCollectionViewCell2()
@@ -50,7 +52,8 @@ class StartGameViewController: UIViewController {
         let nib3 = UINib(nibName: "TestCollectionReusableView", bundle: nil)
         collectionView!.register(nib3, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader")
         collectionView2!.register(nib3, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader")
-        configureinputScoreTextFIeld()
+        startGameCollectionViewCell2.inputScore?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+ //       configureinputScoreTextFIeld()
         
         // minimumLineSpacingForSectionAtとminimumInteritemSpacingForSectionAt、collectionviewのレイアウトをひとまとめにしたが、セクション毎のアイテム数が設定できず没
         //        numberOfItemsInRow(5)
@@ -65,6 +68,13 @@ class StartGameViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        if let text = startGameCollectionViewCell2.inputScore.text {
+            print("aaa")
+                print(text)
+            }
+    }
+    
     func setNavigationBarButton() {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(didTapSaveButton))
@@ -73,9 +83,9 @@ class StartGameViewController: UIViewController {
     
     
     
-    func configureinputScoreTextFIeld() {
-        startGameCollectionViewCell2.textField.inputAccessoryView = toolBar
-    }
+//    func configureinputScoreTextFIeld() {
+//        startGameCollectionViewCell2.inputScore.inputAccessoryView = toolBar
+//    }
     
     @objc func didTupDone() {
         view.endEditing(true)
@@ -161,10 +171,10 @@ extension StartGameViewController: UICollectionViewDataSource {
                 return 5
                 
             case 1:
-                return 1000
+                return 50
                 
             case 2:
-                return 1000
+                return 50
                 
             default:
                 print("error")
@@ -187,9 +197,9 @@ extension StartGameViewController: UICollectionViewDataSource {
             switch(indexPath.section){
             case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
-            let username = matchMember[indexPath.row]
+            let username2 = matchMember[indexPath.row]
             //色々いじる
-            cell.setText(username)
+            cell.setText(username2)
             cell.setBackgroundColor(.lightGray)
             return cell
             case 1:
@@ -203,10 +213,17 @@ extension StartGameViewController: UICollectionViewDataSource {
             }
         }else  {
             let cell = collectionView2.dequeueReusableCell(withReuseIdentifier: "Cell2", for: indexPath) as! StartGameCollectionViewCell2
-            scoreData.score = startGameCollectionViewCell2.textField.text ?? ""
-            matchData.scoreList.insert(scoreData.score, at: indexPath.row)
+//            scoreData.score = startGameCollectionViewCell2.inputScore.text ?? ""
+//            matchData.scoreList.insert(scoreData.score, at: indexPath.row)
             print(scoreData.score)
+            cell.inputScore.inputAccessoryView = toolBar
+//            let scorekari = matchMember2[indexPath.row]
+//            cell.scoreLabel(scorekari)
+            
+            print(scoreList)
+            scoreList = [indexPath]
             return cell
+            
         }
     }
     // メンバーとスコアのコレクションビューをswich文で表示
@@ -234,7 +251,12 @@ extension StartGameViewController: UICollectionViewDataSource {
             let vc = SelectUserViewController()
             vc.index = indexPath
             vc.delegate = self
+            print(indexPath)
             navigationController?.pushViewController(vc, animated: true)
+        }else {
+//            let vc = StartGameCollectionViewCell2()
+//            vc.index = indexPath
+//            vc.delegate = self
         }
     }
     
@@ -332,6 +354,15 @@ extension StartGameViewController: SelectUserViewControllerDelegate  {
     func selectUserViewController(user: UserData, index: IndexPath) {
         if collectionView.tag == 0 {
             matchMember[index.row] = user.userName
+//            print(user.userName)
+            collectionView.reloadData()
+        }
+    }
+}
+extension StartGameViewController: StartGamerViewControllerCell2Delegate  {
+    func startGamerViewControllerCell2(StartGameCollectionViewCell2: UITextField, index: IndexPath) {
+        if collectionView.tag == 1 {
+            matchMember2[index.row] = startGameCollectionViewCell2.inputScore
             collectionView.reloadData()
         }
     }
