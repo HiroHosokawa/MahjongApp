@@ -22,20 +22,6 @@ class StartGameViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionView2: UICollectionView!
-    // メンバーとスコアのコレクションビューをswich文で表示
-    //        enum Cell: Int, CaseIterable {
-    //            case startGameCollectionViewCell
-    //            case startGameCollectionViewCell2
-    //
-    //
-    //            var cellIdentifier: String {
-    //                switch self {
-    //                case .startGameCollectionViewCell: return "StartGameCollectionViewCell"
-    //                case .startGameCollectionViewCell2: return "StartGameCollectionViewCell2"
-    //                }
-    //            }
-    //    }
-    // let cellType = Cell(rawValue: indexPath.row)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,12 +38,7 @@ class StartGameViewController: UIViewController {
         let nib3 = UINib(nibName: "TestCollectionReusableView", bundle: nil)
         collectionView!.register(nib3, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader")
         collectionView2!.register(nib3, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader")
-        startGameCollectionViewCell2.inputScore?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
- //       configureinputScoreTextFIeld()
-        
-        // minimumLineSpacingForSectionAtとminimumInteritemSpacingForSectionAt、collectionviewのレイアウトをひとまとめにしたが、セクション毎のアイテム数が設定できず没
-        //        numberOfItemsInRow(5)
-        
+ 
     }
     
     init() {
@@ -68,24 +49,12 @@ class StartGameViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        if let text = startGameCollectionViewCell2.inputScore.text {
-            print("aaa")
-                print(text)
-            }
-    }
     
     func setNavigationBarButton() {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(didTapSaveButton))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "リセット", style: .plain, target: self, action: #selector(didTapResetButton))
     }
-    
-    
-    
-//    func configureinputScoreTextFIeld() {
-//        startGameCollectionViewCell2.inputScore.inputAccessoryView = toolBar
-//    }
     
     @objc func didTupDone() {
         view.endEditing(true)
@@ -354,16 +323,16 @@ extension StartGameViewController: SelectUserViewControllerDelegate  {
     func selectUserViewController(user: UserData, index: IndexPath) {
         if collectionView.tag == 0 {
             matchMember[index.row] = user.userName
-//            print(user.userName)
+            print(user.userName)
             collectionView.reloadData()
         }
     }
 }
-extension StartGameViewController: StartGamerViewControllerCell2Delegate  {
-    func startGamerViewControllerCell2(StartGameCollectionViewCell2: UITextField, index: IndexPath) {
-        if collectionView.tag == 1 {
-            matchMember2[index.row] = startGameCollectionViewCell2.inputScore
-            collectionView.reloadData()
-        }
-    }
-}
+//extension StartGameViewController: StartGamerViewControllerCell2Delegate  {
+//    func startGamerViewControllerCell2(StartGameCollectionViewCell2: UITextField, index: IndexPath) {
+//        if collectionView.tag == 1 {
+//            matchMember2[index.row] = startGameCollectionViewCell2.inputScore
+//            collectionView.reloadData()
+//        }
+//    }
+//}

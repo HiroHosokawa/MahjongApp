@@ -19,18 +19,18 @@ class StartGameCollectionViewCell2: UICollectionViewCell {
         var index: IndexPath?
     
     
-    
-    
-    override func prepareForReuse() {
-     //textFieldLayout()
-        inputScore.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        inputScore.delegate = self
-    }
+    override func awakeFromNib() {
+            super.awakeFromNib()
+            
+            inputScore.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+            inputScore.delegate = self
+        }
     
     @objc func textFieldDidChange(_ inputScore: UITextField) {
         if let text = inputScore.text {
-            print("aaa")
+        
             print(text)
+            
         }
     }
     

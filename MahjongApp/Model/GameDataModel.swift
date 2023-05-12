@@ -2,35 +2,34 @@
 //  GameDataModel.swift
 //  MahjongApp
 //
-//  Created by 細川比呂 on 2023/02/20.
+//  Created by 細川比呂 on 2023/04/24.
 //
 
-import Foundation
-import RealmSwift
-
-class UserData: Object {
-    @objc dynamic var userName = ""
-}
-
-class MatchData: Object {
-@objc dynamic var id: String = ""
-//    var members: List<UserData>
-     var scoreList: [String] = []
-//   var date: Date
-}
+//import Foundation
+//import RealmSwift
 //
-class ScoreData: Object {
-//    var id: String = ""
-   @objc dynamic var score: String = ""
-//    var order: Int = 0
-//    var authorID: String = ""
-}
+//class Member: Object {
+//    @objc dynamic  var id: String = ""
+//    @objc dynamic  var name: String = ""
+//}
 //
-//class CheckData: Object {
-//    var ronCount: Int = 0
-//    var tsumoCount: Int = 0
-//    var huroCount: Int = 0
-//    var hurikomiCount: Int = 0
-//    var reachCount: Int = 0
-//    var gameCount: Int = 0
+//class Game: Object {
+//    @objc dynamic  var id: String = ""
+//    @objc dynamic   var memberIDs: [String] = [] // RealmのListは順番を保持できるため、並び順通りに追加する
+//    @objc dynamic   var scores: [Score] = [] // 点数
+//    @objc dynamic   var tips: [Tip] = [] // チップ
+//    @objc dynamic   var date: Date // 開始(終了)時間
+//    @objc dynamic  var isPlaying: Bool // ゲーム中かすでに保存済みか
+//}
+//
+//class Score: Object {
+//    @objc dynamic var id: String = ""
+//    @objc dynamic var playerID: String = "" // 参加者のIDと紐づく
+//    @objc dynamic var points: [Int] = [] // 縦に並ぶ点数を順番通りに保存する
+//}
+//
+//class Tip: Object {
+//    @objc dynamic var id: String = ""
+//    @objc dynamic var playerID: String = "" // 参加者のIDと紐づく
+//    @objc dynamic var value: Int = 0 // 金額(?)
 //}
