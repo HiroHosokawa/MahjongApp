@@ -5,8 +5,48 @@
 //  Created by 細川比呂 on 2023/04/24.
 //
 
-//import Foundation
-//import RealmSwift
+import Foundation
+import RealmSwift
+
+// 対局データ.
+class GameDataModel: Object {
+    /// id.
+    @objc dynamic var id = UUID()
+    /// 日付.
+    @objc dynamic var date = Date()
+    /// ユーザーネーム.
+    var userNames = List<UserDataModel>()
+    /// チップデータ.
+    var ChipData = List<ChipDataModel>()
+    /// スコア.
+    var score = List<ScoreDataModel>()
+}
+
+// TODO: 別ファイルとして移動させる
+/// ユーザーデータ.
+class UserDataModel: Object {
+    /// id.
+    @objc dynamic var id = UUID()
+    /// ユーザー名.
+    @objc dynamic var userName = ""
+}
+
+/// チップデータ.
+class ChipDataModel: Object {
+    /// id.
+    @objc dynamic var id = UUID()
+    /// チップ.
+    @objc dynamic var chip: Int = 0
+}
+
+/// スコアデータ.
+class ScoreDataModel: Object {
+    /// id.
+    @objc dynamic var id = UUID()
+    /// スコア.
+    @objc dynamic var score: Int = 0
+}
+
 //
 //class Member: Object {
 //    @objc dynamic  var id: String = ""

@@ -4,18 +4,42 @@
 
 // Created by 細川比呂 on 2023/02/12.
 
-
 import Foundation
 import UIKit
+import RealmSwift
+
+// ゲームデータに関連するCellのセクションタイプ.
+// TODO: 最終的にはファイル移動する
+enum GameScoreType: Int {
+    /// チップ.
+    case chip
+    /// スコア.
+    case score
+}
 
 class StartGameViewController: UIViewController {
     var matchMember: [String] = ["あなた", "A", "B", "C", "D", ]
-    var matchMember2: [String] = ["あなた", "A", "B", "C", "D", ]
     var collectionViewSection: [String] = ["対局メンバー","合計"]
     var collectionViewSection2: [String] = ["チップ入力欄","スコア入力欄"]
-    let scoreData = ScoreData()
-    var scoreList: [Any] = []
-    let matchData = MatchData()
+    /// 合計値のデータ.
+    private var totalData = [Int](repeating: 0, count: 5)
+    /// チップのデータ.
+    private var chipData = [Int](repeating: 0, count: 5)
+    /// スコアのデータ.
+    private var scoreData = [ScoreDataModel](repeating: .init(), count: 50)
+    
+    //ツールバー
+    var toolBar: UIToolbar {
+        let toolBarRect = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35)
+        let toolBar = UIToolbar(frame: toolBarRect)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTupDone))
+        toolBar.setItems([doneItem], animated: true)
+        return toolBar
+    }
+    
+    @objc func didTupDone() {
+        view.endEditing(true)
+    }
     
     let startGameCollectionViewCell2 = StartGameCollectionViewCell2()
     
@@ -25,8 +49,47 @@ class StartGameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // NavigationBarButtonのセットする
         setNavigationBarButton()
+        // CollectionViewをセットする
+        setCollectionViews()
         self.title = "日付入力"
+        
+        // **テスト**
+        // Realmデータに保存されているかチェックする(後で削除する)
+        checkTestSavedScoreData()
+    }
+    
+    // Realmデータに保存されているかチェックする(後で削除する).
+    // 一番左のスコア入力欄の数字をPrint出力する.
+    func checkTestSavedScoreData() {
+        let realm = try! Realm()
+        var data: [GameDataModel] = []
+        let result = realm.objects(GameDataModel.self)
+        
+        data = Array(result)
+        
+        if !data.isEmpty {
+            print(data[0].score[0].score, "テストです")
+        }
+    }
+    
+    init() {
+        super.init(nibName: String(describing: StartGameViewController.self), bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // NavigationBarButtonのセットする.
+    func setNavigationBarButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(didTapSaveButton))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "リセット", style: .plain, target: self, action: #selector(didTapResetButton))
+    }
+    
+    //    colectionViewをセット
+    func setCollectionViews() {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView2.dataSource = self
@@ -38,35 +101,9 @@ class StartGameViewController: UIViewController {
         let nib3 = UINib(nibName: "TestCollectionReusableView", bundle: nil)
         collectionView!.register(nib3, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader")
         collectionView2!.register(nib3, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader")
- 
     }
     
-    init() {
-        super.init(nibName: String(describing: StartGameViewController.self), bundle: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-    func setNavigationBarButton() {
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(didTapSaveButton))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "リセット", style: .plain, target: self, action: #selector(didTapResetButton))
-    }
-    
-    @objc func didTupDone() {
-        view.endEditing(true)
-    }
-    var toolBar: UIToolbar {
-        let toolBarRect = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35)
-        let toolBar = UIToolbar(frame: toolBarRect)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTupDone))
-        toolBar.setItems([doneItem], animated: true)
-        return toolBar
-    }
-    
+    // ダイアログの保存Button処理.
     @objc func didTapSaveButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(
             title: "対局の終了",
@@ -89,6 +126,7 @@ class StartGameViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    // ダイアログのキャンセルButton処理.
     @objc func didTapResetButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(
             title: "データの消去",
@@ -110,7 +148,125 @@ class StartGameViewController: UIViewController {
     }
 }
 
+extension StartGameViewController {
+    // 対局の情報を保存する.
+    func saveRecord() {
+        let realm = try! Realm()
+        try! realm.write {
+            let record = GameDataModel()
+            record.date = Date()
+            record.score.append(objectsIn: scoreData)
+            realm.add(record)
+        }
+    }
+}
+
+/// 各チップもしくはスコアの入力が終わると呼ばれる.
+extension StartGameViewController: StartGamerViewControllerCell2Delegate {
+    /// ゲームスコアをセットする
+    func setGameScore(
+        score: Int,
+        index: Int,
+        gameScoreType: GameScoreType
+    ) {
+        switch gameScoreType {
+        case .chip:
+            let addChipData = score
+            chipData[index] = addChipData
+            print(chipData[0])
+        case .score:
+            let addScoreData = ScoreDataModel()
+            addScoreData.score = score
+            scoreData[index] = addScoreData
+        }
+        
+        // ゲームスコアの計算をする
+        gameScoreCalculation()
+        // collectionViewのreload
+        collectionView.reloadData()
+    }
+    
+    /// ゲームスコアの計算をする
+    private func gameScoreCalculation() {
+        /// Aさん.
+        var a = 0
+        /// Bさん.
+        var b = 0
+        /// Cさん.
+        var c = 0
+        /// Dさん.
+        var d = 0
+        /// Eさん.
+        var e = 0
+        // TODO: ここのロジックはリファクタリングできる(優先度: 中)
+        for(index,score) in scoreData.enumerated() {
+            switch index {
+            case 0,5,10,15,20,25,30,35,40,45:
+                // A列の合計を計算する(左から1番目)
+                a += score.score
+                totalData[0] = a
+                
+            case 1,6,11,16,21,26,31,36,41,46:
+                // B列の合計を計算する(左から2番目)
+                b += score.score
+                totalData[1] = b
+                
+            case 2,7,12,17,22,27,32,37,42,47:
+                // C列の合計を計算する(左から3番目)
+                c += score.score
+                totalData[2] = c
+                
+            case 3,8,13,18,23,28,33,38,43,48:
+                // D列の合計を計算する(左から4番目)
+                d += score.score
+                totalData[3] = d
+                
+            case 4,9,14,19,24,29,34,39,44,49:
+                // E列の合計を計算する(左から5番目)
+                e += score.score
+                totalData[4] = e
+                
+            default:
+                break
+            }
+        }
+        for(index,score) in chipData.enumerated() {
+            switch index {
+            case 0:
+                // A列のチップを計算する(左から1番目)
+                a += chipData[0]
+                totalData[0] = a
+                
+            case 1:
+                // B列のチップを計算する(左から2番目)
+                b += chipData[1]
+                totalData[1] = b
+                
+            case 2:
+                // C列のチップを計算する(左から3番目)
+                c += chipData[2]
+                totalData[2] = c
+                
+            case 3:
+                // D列のチップを計算する(左から4番目)
+                d += chipData[3]
+                totalData[3] = d
+                
+            case 4:
+                // E列のチップを計算する(左から5番目)
+                e += chipData[4]
+                totalData[4] = e
+                
+            default:
+                break
+            }
+        }
+    }
+}
+
+
 extension StartGameViewController: UICollectionViewDelegate {
+    //    colectionView毎のセクション数を設定
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if collectionView.tag == 0 {
             return collectionViewSection.count
@@ -123,6 +279,7 @@ extension StartGameViewController: UICollectionViewDelegate {
 }
 
 extension StartGameViewController: UICollectionViewDataSource {
+    //    セクション毎にセルの個数を設定
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView.tag == 0 {
             switch(section){
@@ -151,70 +308,44 @@ extension StartGameViewController: UICollectionViewDataSource {
             }
         }
     }
-    // メンバーとスコアのコレクションビューをswich文で表示
-    //        let cellType = Cell(rawValue: indexPath.row)!
-    //                       switch cellType {
-    //                       case .startGameCollectionViewCell:
-    //                                   return 5
-    //                       case .startGameCollectionViewCell2:
-    //                           return 20
-    //                       }
     
-    
+    //    カスタムセルの内容を表示する
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView.tag == 0 {
             switch(indexPath.section){
             case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
-            let username2 = matchMember[indexPath.row]
-            //色々いじる
-            cell.setText(username2)
-            cell.setBackgroundColor(.lightGray)
-            return cell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
+                let username2 = matchMember[indexPath.row]
+                //色々いじる
+                cell.setText(username2)
+                cell.setBackgroundColor(.lightGray)
+                return cell
             case 1:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
-                let sumScore: String = "合計値"
-                cell.setText(sumScore)
+                cell.setText(String(totalData[indexPath.row]))
+                
                 return cell
                 
             default:
                 return UICollectionViewCell()
             }
         }else  {
-            let cell = collectionView2.dequeueReusableCell(withReuseIdentifier: "Cell2", for: indexPath) as! StartGameCollectionViewCell2
-//            scoreData.score = startGameCollectionViewCell2.inputScore.text ?? ""
-//            matchData.scoreList.insert(scoreData.score, at: indexPath.row)
-            print(scoreData.score)
+            let cell = collectionView2.dequeueReusableCell(
+                withReuseIdentifier: "Cell2",
+                for: indexPath
+            ) as! StartGameCollectionViewCell2
+            
             cell.inputScore.inputAccessoryView = toolBar
-//            let scorekari = matchMember2[indexPath.row]
-//            cell.scoreLabel(scorekari)
+            cell.delegate = self
             
-            print(scoreList)
-            scoreList = [indexPath]
+            if let gameScoreType = GameScoreType(rawValue: indexPath.section) {
+                cell.setUp(index: indexPath.row, gameScoreType: gameScoreType)
+            }
             return cell
-            
         }
     }
-    // メンバーとスコアのコレクションビューをswich文で表示
-    //        let cellType = Cell(rawValue: indexPath.row)!
-    //
-    //                switch cellType {
-    //
-    //                case .startGameCollectionViewCell:
-    //                            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
-    //                            let username = matchMember[indexPath.row]
-    //                            //色々いじる
-    //                            cell.setText(username)
-    //                            cell.setBackgroundColor(.lightGray)
-    //                            return cell
-    //                case .startGameCollectionViewCell2:
-    //                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell2", for: indexPath) as! StartGameCollectionViewCell2
-    //                    return cell
-    //                }
-    //    }
     
-    
-    
+    //    対局者を決定
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView.tag == 0 {
             let vc = SelectUserViewController()
@@ -223,12 +354,9 @@ extension StartGameViewController: UICollectionViewDataSource {
             print(indexPath)
             navigationController?.pushViewController(vc, animated: true)
         }else {
-//            let vc = StartGameCollectionViewCell2()
-//            vc.index = indexPath
-//            vc.delegate = self
         }
     }
-    
+    //    セクションのタイトルを設定
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if collectionView.tag == 0 {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader", for: indexPath) as! TestCollectionReusableView
@@ -244,28 +372,8 @@ extension StartGameViewController: UICollectionViewDataSource {
 }
 
 
-
-//     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView
-//        {
-//
-//            if (kind == "UICollectionElementKindSectionHeader") {
-//                        //ヘッダーの場合
-//                let testSection = collectionView2.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "SectionHeader", forIndexPath: indexPath) as! TestCollectionReusableView
-//
-//
-//                //ヘッダーの背景色は紫、ラベルにセクション名を設定する。
-//                testSection.backgroundColor = UIColor(red: 0.7, green: 0.7,blue: 0.8, alpha: 1.0)
-//                testSection.sectionLabel.text = collectionViewSection[indexPath.section]
-//
-//                return testSection
-//
-//
-//            }
-//        }
-
-
 extension StartGameViewController: UICollectionViewDelegateFlowLayout {
-    
+    //    セルのサイズを設定
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView.tag == 0 {
             let width: CGFloat = UIScreen.main.bounds.width / 5
@@ -276,28 +384,10 @@ extension StartGameViewController: UICollectionViewDelegateFlowLayout {
             let height: CGFloat = UIScreen.main.bounds.height / 20
             return CGSize(width: width, height: height)
         }
-        // minimumLineSpacingForSectionAtとminimumInteritemSpacingForSectionAt、collectionviewのレイアウトをひとまとめにしたが、セクション毎のアイテム数が設定できず没
-        //    func numberOfItemsInRow(_ number: CGFloat) {
-        //
-        //        if collectionView.tag == 0 {
-        //            let layout = UICollectionViewFlowLayout()
-        //            let width: CGFloat = UIScreen.main.bounds.width / 5
-        //            let height: CGFloat = UIScreen.main.bounds.height / 20
-        //            layout.itemSize = CGSize(width: width, height: height)
-        //            layout.minimumLineSpacing = 0
-        //            layout.minimumInteritemSpacing = 0
-        //
-        //            collectionView.collectionViewLayout = layout
-        //        }else if collectionView.tag == 1 {
-        //            let layout = UICollectionViewFlowLayout()
-        //            let width: CGFloat = UIScreen.main.bounds.width / 5
-        //            let height: CGFloat = width
-        //            layout.itemSize = CGSize(width: width, height: height)
-        //            layout.minimumLineSpacing = 0
-        //            layout.minimumInteritemSpacing = 0
-        //        }
+      
+       
     }
-    
+    //セルごとの間隔調整
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -313,25 +403,17 @@ extension StartGameViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGFloat {
         return 0
     }
-    
-     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-    return CGSize(width: self.view.bounds.width, height: 30)
+    //セクション名のサイズを設定
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: self.view.bounds.width, height: 30)
     }
 }
 
-extension StartGameViewController: SelectUserViewControllerDelegate  {
-    func selectUserViewController(user: UserData, index: IndexPath) {
-        if collectionView.tag == 0 {
-            matchMember[index.row] = user.userName
-            print(user.userName)
-            collectionView.reloadData()
-        }
-    }
-}
-//extension StartGameViewController: StartGamerViewControllerCell2Delegate  {
-//    func startGamerViewControllerCell2(StartGameCollectionViewCell2: UITextField, index: IndexPath) {
-//        if collectionView.tag == 1 {
-//            matchMember2[index.row] = startGameCollectionViewCell2.inputScore
+//extension StartGameViewController: SelectUserViewControllerDelegate  {
+//    func selectUserViewController(user: UserData, index: IndexPath) {
+//        if collectionView.tag == 0 {
+//            matchMember[index.row] = user.userName
+//            print(user.userName)
 //            collectionView.reloadData()
 //        }
 //    }
