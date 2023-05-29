@@ -21,6 +21,7 @@ class StartGameCollectionViewCell: UICollectionViewCell {
 //        
 //    }
     
+    
     func setborderColor() {
     let borderColor = UIColor(red: 255/255, green: 0.0/255, blue: 0.0/255, alpha: 1.0).cgColor
     matchName.layer.borderColor = borderColor

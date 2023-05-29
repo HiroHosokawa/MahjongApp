@@ -26,11 +26,12 @@ enum LabelType: Int {
 }
 
 class StartGameViewController: UIViewController {
-    var matchMember: [String] = ["あなた", "A", "B", "C", "D", ]
+    //対局者のデータ
+    var matchMember = [MemberDataModel](repeating: .init(), count: 5)
     var collectionViewSection: [String] = ["対局メンバー","合計"]
     var collectionViewSection2: [String] = ["チップ入力欄","スコア入力欄"]
     /// 合計値のデータ.
-    private var totalData = [Int](repeating: 4, count: 5)
+    private var totalData = [Int](repeating: 0, count: 5)
     /// チップのデータ.
     private var chipData = [ChipDataModel](repeating: .init(), count: 5)
     /// スコアのデータ.
@@ -167,8 +168,9 @@ extension StartGameViewController {
             record.date = Date()
             record.score.append(objectsIn: scoreData)
             record.chipData.append(objectsIn: chipData)
-//            record.userNames.append(objectsIn: matchMember[index.row])
+            record.userNames.append(objectsIn: matchMember)
             realm.add(record)
+            print(record)
         }
     }
 }
@@ -246,7 +248,7 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
                 break
             }
         }
-        for(index,score) in chipData.enumerated() {
+        for(index,_) in chipData.enumerated() {
             switch index {
             case 0:
                 // A列のチップを計算する(左から1番目)
@@ -326,17 +328,16 @@ extension StartGameViewController: UICollectionViewDataSource {
     //    カスタムセルの内容を表示する
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView.tag == 0 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
+            
             switch(indexPath.section){
             case 0:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
-                let username2 = matchMember[indexPath.row]
-                //色々いじる
-                
+                let memberData = MemberDataModel()
+                let username2 = memberData.memberName
                 cell.setText(username2)
                // cell.setBackgroundColor(.lightGray)
                 return cell
             case 1:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
                 cell.setText(String(totalData[indexPath.row]))
         
                 return cell
@@ -362,7 +363,7 @@ extension StartGameViewController: UICollectionViewDataSource {
     
     //    対局者を決定
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView.tag == 0 {
+        if collectionView.tag == 0 && indexPath.section == 0 {
             let vc = SelectUserViewController()
             vc.index = indexPath
             vc.delegate = self
@@ -427,10 +428,13 @@ extension StartGameViewController: UICollectionViewDelegateFlowLayout {
 extension StartGameViewController: SelectUserViewControllerDelegate  {
     func selectUserViewController(user: UserDataModel, index: IndexPath) {
         if collectionView.tag == 0 {
-            matchMember[index.row] = user.userName
-            print(user.userName)
-            print(matchMember)
-            print(matchMember[1])
+//            matchMember[index.row] = user.userName
+//            print(user.userName)
+//            print(matchMember)
+//            print(matchMember[1])
+            let addMemberData = MemberDataModel()
+            addMemberData.memberName = user.userName
+            matchMember[index.row] = addMemberData
             
             collectionView.reloadData()
         }

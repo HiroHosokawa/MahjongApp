@@ -15,12 +15,19 @@ class GameDataModel: Object {
     /// 日付.
     @objc dynamic var date = Date()
     /// ユーザーネーム.
-    var userNames = List<UserDataModel>()
+    var userNames = List<MemberDataModel>()
     /// チップデータ.
     var chipData = List<ChipDataModel>()
     /// スコア.
     var score = List<ScoreDataModel>()
     
+}
+
+class MemberDataModel: Object {
+    /// id.
+    @objc dynamic var id = UUID()
+    /// ユーザー名.
+    @objc dynamic var memberName = ""
 }
 
 // TODO: 別ファイルとして移動させる
