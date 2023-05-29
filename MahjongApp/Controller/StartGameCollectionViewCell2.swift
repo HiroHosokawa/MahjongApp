@@ -30,6 +30,8 @@ class StartGameCollectionViewCell2: UICollectionViewCell {
         self.gameScoreType = gameScoreType
     }
     
+    
+    
     func scoreLabel(_ text: String) {
         inputScore.text =  text
     }

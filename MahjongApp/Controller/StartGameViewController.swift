@@ -12,9 +12,17 @@ import RealmSwift
 // TODO: 最終的にはファイル移動する
 enum GameScoreType: Int {
     /// チップ.
-    case chip
+    case chip = 0
     /// スコア.
-    case score
+    case score = 1
+}
+
+enum LabelType: Int {
+    //対局者
+    case member = 0
+    //合計値
+    case sumScore = 1
+
 }
 
 class StartGameViewController: UIViewController {
@@ -22,9 +30,9 @@ class StartGameViewController: UIViewController {
     var collectionViewSection: [String] = ["対局メンバー","合計"]
     var collectionViewSection2: [String] = ["チップ入力欄","スコア入力欄"]
     /// 合計値のデータ.
-    private var totalData = [Int](repeating: 0, count: 5)
+    private var totalData = [Int](repeating: 4, count: 5)
     /// チップのデータ.
-    private var chipData = [Int](repeating: 0, count: 5)
+    private var chipData = [ChipDataModel](repeating: .init(), count: 5)
     /// スコアのデータ.
     private var scoreData = [ScoreDataModel](repeating: .init(), count: 50)
     
@@ -54,7 +62,6 @@ class StartGameViewController: UIViewController {
         // CollectionViewをセットする
         setCollectionViews()
         self.title = "日付入力"
-        
         // **テスト**
         // Realmデータに保存されているかチェックする(後で削除する)
         checkTestSavedScoreData()
@@ -114,6 +121,8 @@ class StartGameViewController: UIViewController {
             title: "保存",
             style: .default,
             handler: { (action) -> Void in
+                self.saveRecord()
+                
                 print("OK")
             })
         
@@ -151,11 +160,14 @@ class StartGameViewController: UIViewController {
 extension StartGameViewController {
     // 対局の情報を保存する.
     func saveRecord() {
+        //初期化
         let realm = try! Realm()
         try! realm.write {
             let record = GameDataModel()
             record.date = Date()
             record.score.append(objectsIn: scoreData)
+            record.chipData.append(objectsIn: chipData)
+//            record.userNames.append(objectsIn: matchMember[index.row])
             realm.add(record)
         }
     }
@@ -171,8 +183,10 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
     ) {
         switch gameScoreType {
         case .chip:
-            let addChipData = score
+            let addChipData = ChipDataModel()
+            addChipData.chip = score
             chipData[index] = addChipData
+            
             print(chipData[0])
         case .score:
             let addScoreData = ScoreDataModel()
@@ -198,30 +212,32 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
         var d = 0
         /// Eさん.
         var e = 0
+        
+        //0
         // TODO: ここのロジックはリファクタリングできる(優先度: 中)
         for(index,score) in scoreData.enumerated() {
-            switch index {
-            case 0,5,10,15,20,25,30,35,40,45:
+            switch index % 5 {
+            case 0:
                 // A列の合計を計算する(左から1番目)
                 a += score.score
                 totalData[0] = a
                 
-            case 1,6,11,16,21,26,31,36,41,46:
+            case 1:
                 // B列の合計を計算する(左から2番目)
                 b += score.score
                 totalData[1] = b
                 
-            case 2,7,12,17,22,27,32,37,42,47:
+            case 2:
                 // C列の合計を計算する(左から3番目)
                 c += score.score
                 totalData[2] = c
                 
-            case 3,8,13,18,23,28,33,38,43,48:
+            case 3:
                 // D列の合計を計算する(左から4番目)
                 d += score.score
                 totalData[3] = d
                 
-            case 4,9,14,19,24,29,34,39,44,49:
+            case 4:
                 // E列の合計を計算する(左から5番目)
                 e += score.score
                 totalData[4] = e
@@ -234,27 +250,27 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
             switch index {
             case 0:
                 // A列のチップを計算する(左から1番目)
-                a += chipData[0]
+                a += chipData[0].chip
                 totalData[0] = a
                 
             case 1:
                 // B列のチップを計算する(左から2番目)
-                b += chipData[1]
+                b += chipData[1].chip
                 totalData[1] = b
                 
             case 2:
                 // C列のチップを計算する(左から3番目)
-                c += chipData[2]
+                c += chipData[2].chip
                 totalData[2] = c
                 
             case 3:
                 // D列のチップを計算する(左から4番目)
-                d += chipData[3]
+                d += chipData[3].chip
                 totalData[3] = d
                 
             case 4:
                 // E列のチップを計算する(左から5番目)
-                e += chipData[4]
+                e += chipData[4].chip
                 totalData[4] = e
                 
             default:
@@ -299,8 +315,6 @@ extension StartGameViewController: UICollectionViewDataSource {
             case 1:
                 return 50
                 
-            case 2:
-                return 50
                 
             default:
                 print("error")
@@ -317,13 +331,14 @@ extension StartGameViewController: UICollectionViewDataSource {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
                 let username2 = matchMember[indexPath.row]
                 //色々いじる
+                
                 cell.setText(username2)
-                cell.setBackgroundColor(.lightGray)
+               // cell.setBackgroundColor(.lightGray)
                 return cell
             case 1:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
                 cell.setText(String(totalData[indexPath.row]))
-                
+        
                 return cell
                 
             default:
@@ -387,7 +402,7 @@ extension StartGameViewController: UICollectionViewDelegateFlowLayout {
       
        
     }
-    //セルごとの間隔調整
+//    セル列の余白の間隔調整
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -395,7 +410,7 @@ extension StartGameViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGFloat {
         return 0
     }
-    
+    //セル行間の余白を調整
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -403,18 +418,21 @@ extension StartGameViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGFloat {
         return 0
     }
-    //セクション名のサイズを設定
+    //セクション名とサイズを設定
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: self.view.bounds.width, height: 30)
     }
 }
 
-//extension StartGameViewController: SelectUserViewControllerDelegate  {
-//    func selectUserViewController(user: UserData, index: IndexPath) {
-//        if collectionView.tag == 0 {
-//            matchMember[index.row] = user.userName
-//            print(user.userName)
-//            collectionView.reloadData()
-//        }
-//    }
-//}
+extension StartGameViewController: SelectUserViewControllerDelegate  {
+    func selectUserViewController(user: UserDataModel, index: IndexPath) {
+        if collectionView.tag == 0 {
+            matchMember[index.row] = user.userName
+            print(user.userName)
+            print(matchMember)
+            print(matchMember[1])
+            
+            collectionView.reloadData()
+        }
+    }
+}

@@ -17,9 +17,10 @@ class GameDataModel: Object {
     /// ユーザーネーム.
     var userNames = List<UserDataModel>()
     /// チップデータ.
-    var ChipData = List<ChipDataModel>()
+    var chipData = List<ChipDataModel>()
     /// スコア.
     var score = List<ScoreDataModel>()
+    
 }
 
 // TODO: 別ファイルとして移動させる

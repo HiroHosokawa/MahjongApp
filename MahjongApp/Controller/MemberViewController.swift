@@ -10,7 +10,8 @@ import UIKit
 import RealmSwift
 
 var addButtonItem: UIBarButtonItem!
-let userData = UserData()
+let userData = UserDataModel()
+
 
 class MemberViewController: UIViewController {
     
@@ -20,12 +21,13 @@ class MemberViewController: UIViewController {
         super.viewDidLoad()
         setNavigationBarButton()
         tableView.dataSource = self
+        tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setUserData()
-        tableView.reloadData()
+        
     }
     
     func setNavigationBarButton() {
@@ -39,11 +41,12 @@ class MemberViewController: UIViewController {
     
     func setUserData() {
         let realm = try! Realm()
-        let result = realm.objects(UserData.self)
+        let result = realm.objects(UserDataModel.self)
         userDataList = Array(result)
+        tableView.reloadData()
     }
     
-    var userDataList: [UserData] = []
+    var userDataList: [UserDataModel] = []
     
     @objc func didTapAddButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "面子の追加", message: "名前を入力してください。", preferredStyle: .alert)
@@ -53,16 +56,16 @@ class MemberViewController: UIViewController {
         let add = UIAlertAction(
             title: "追加",
             style: .default,
-            handler: { (action) -> Void in
+            handler: { [self] (action) -> Void in
                 print("OK")
                 if let textFieldInAlert = alert.textFields?.first {
-                    
                     userData.userName = textFieldInAlert.text ?? ""
                     print(userData.userName)
                     do{
                         let realm = try Realm()
                         try realm.write({ () -> Void in
                             realm.add(userData)
+                            self.tableView.reloadData()
                         })
                     }catch{
                     }
@@ -75,6 +78,7 @@ class MemberViewController: UIViewController {
         alert.addAction(add);
         alert.addAction(cancel);
         self.present(alert, animated: true, completion: nil)
+        
     }
 }
 

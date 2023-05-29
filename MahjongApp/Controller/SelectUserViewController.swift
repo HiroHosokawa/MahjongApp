@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 protocol SelectUserViewControllerDelegate: AnyObject {
-    func selectUserViewController(user: UserData, index: IndexPath)
+    func selectUserViewController(user: UserDataModel, index: IndexPath)
 }
 
 class SelectUserViewController: UIViewController {
@@ -42,11 +42,11 @@ class SelectUserViewController: UIViewController {
     
     func setUserData() {
         let realm = try! Realm()
-        let result = realm.objects(UserData.self)
+        let result = realm.objects(UserDataModel.self)
         userDataList = Array(result)
     }
     
-    var userDataList: [UserData] = []
+    var userDataList: [UserDataModel] = []
     
     @objc func didTapAddButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "面子の追加", message: "名前を入力してください。", preferredStyle: .alert)
@@ -62,6 +62,7 @@ class SelectUserViewController: UIViewController {
                 if let textFieldInAlert = alert.textFields?.first {
                     userData.userName = textFieldInAlert.text ?? ""
                     print(userData.userName)
+                    self.tableView.reloadData()
                     do{
                         let realm = try Realm()
                         try realm.write({ () -> Void in

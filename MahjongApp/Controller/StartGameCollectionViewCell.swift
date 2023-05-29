@@ -13,11 +13,18 @@ class StartGameCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var matchName: UILabel!
     
-    let label = UILabel()
-    
     override func prepareForReuse() {
-            
+        
         }
+    
+//    func setUpLabel(index: Int, gameScoreType: GameScoreType) {
+//        
+//    }
+    
+    func setborderColor() {
+    let borderColor = UIColor(red: 255/255, green: 0.0/255, blue: 0.0/255, alpha: 1.0).cgColor
+    matchName.layer.borderColor = borderColor
+    }
         
         func setText(_ text: String?) {
             matchName.text = text
@@ -26,6 +33,7 @@ class StartGameCollectionViewCell: UICollectionViewCell {
         
         func setBackgroundColor(_ color: UIColor) {
             contentView.backgroundColor = color
+        
         }    
     }
 

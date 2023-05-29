@@ -8,9 +8,9 @@
 import Foundation
 import RealmSwift
 
-class UserData: Object {
-    @objc dynamic var userName = ""
-}
+//class UserData: Object {
+//    @objc dynamic var userName = ""
+//}
 
 class MatchData: Object {
 @objc dynamic var id: String = ""
