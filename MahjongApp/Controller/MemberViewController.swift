@@ -58,15 +58,16 @@ class MemberViewController: UIViewController {
             style: .default,
             handler: { [self] (action) -> Void in
                 print("OK")
+                
                 if let textFieldInAlert = alert.textFields?.first {
                     userData.userName = textFieldInAlert.text ?? ""
                     print(userData.userName)
                     do{
                         let realm = try Realm()
-                        try realm.write({ () -> Void in
+                        try realm.write {
                             realm.add(userData)
-                            self.tableView.reloadData()
-                        })
+                        }
+                        setUserData()
                     }catch{
                     }
                     

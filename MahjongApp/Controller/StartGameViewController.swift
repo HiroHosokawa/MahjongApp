@@ -26,6 +26,7 @@ enum LabelType: Int {
 }
 
 class StartGameViewController: UIViewController {
+    var sampleMember: [String] = ["A","B","C","D","E"]
     //対局者のデータ
     var matchMember = [MemberDataModel](repeating: .init(), count: 5)
     var collectionViewSection: [String] = ["対局メンバー","合計"]
@@ -121,9 +122,11 @@ class StartGameViewController: UIViewController {
         let add = UIAlertAction(
             title: "保存",
             style: .default,
-            handler: { (action) -> Void in
+            handler: { [self] (action) -> Void in
+                let vc = GameDataViewController()
+            
                 self.saveRecord()
-                
+                navigationController?.pushViewController(vc, animated: true)
                 print("OK")
             })
         
@@ -332,9 +335,15 @@ extension StartGameViewController: UICollectionViewDataSource {
             
             switch(indexPath.section){
             case 0:
-                let memberData = MemberDataModel()
-                let username2 = memberData.memberName
-                cell.setText(username2)
+                
+                let username2 = matchMember[indexPath.row].memberName
+                /// userneme2が空文字のときはサンプルメンバーを使う.
+                cell.setText(username2.isEmpty ? sampleMember[indexPath.row] : username2 )
+//                let memberData = MemberDataModel()
+//                let a = MemberViewController()
+//                a.setUserData()
+//                let username2 = memberData.memberName
+//                cell.setText(username2)
                // cell.setBackgroundColor(.lightGray)
                 return cell
             case 1:

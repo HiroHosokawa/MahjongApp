@@ -44,6 +44,7 @@ class SelectUserViewController: UIViewController {
         let realm = try! Realm()
         let result = realm.objects(UserDataModel.self)
         userDataList = Array(result)
+        tableView.reloadData()
     }
     
     var userDataList: [UserDataModel] = []
@@ -57,17 +58,19 @@ class SelectUserViewController: UIViewController {
         let add = UIAlertAction(
             title: "追加",
             style: .default,
-            handler: { (action) -> Void in
+            handler: { [self] (action) -> Void in
                 print("OK")
                 if let textFieldInAlert = alert.textFields?.first {
+                    let userData = UserDataModel()
                     userData.userName = textFieldInAlert.text ?? ""
                     print(userData.userName)
-                    self.tableView.reloadData()
                     do{
-                        let realm = try Realm()
-                        try realm.write({ () -> Void in
+                        let realm = try! Realm()
+                        try realm.write {
                             realm.add(userData)
-                        })
+                        }
+                        
+                      setUserData()
                     }catch{
                     }
                 }
