@@ -29,17 +29,17 @@ class MainTabBarController: UITabBarController {
         let gameDataViewNav = UINavigationController(rootViewController: gameDataViewController)
         let memberViewController = MemberViewController()
         let memberViewNav = UINavigationController(rootViewController: memberViewController)
-        let checkerViewController = CheckerViewController()
-        let checkerViewNav = UINavigationController(rootViewController: checkerViewController)
+//        let checkerViewController = CheckerViewController()
+//        let checkerViewNav = UINavigationController(rootViewController: checkerViewController)
         let systemViewController = SystemViewController()
         let systemViewNav = UINavigationController(rootViewController: systemViewController)
         
         startGameViewController.tabBarItem = UITabBarItem(title: "対局！", image: UIImage(named: "startGameIcon"), tag: 1)
         gameDataViewController.tabBarItem = UITabBarItem(title: "履歴", image: UIImage(named: "gameDataIcon"), tag: 2)
         memberViewController.tabBarItem = UITabBarItem(title: "面子", image: UIImage(named: "memberIcon"), tag: 3)
-        checkerViewController.tabBarItem = UITabBarItem(title: "チェッカー", image: UIImage(named: "checkIcon"), tag: 4)
+//        checkerViewController.tabBarItem = UITabBarItem(title: "チェッカー", image: UIImage(named: "checkIcon"), tag: 4)
         systemViewController.tabBarItem = UITabBarItem(title: "設定", image: UIImage(named: "systemIcon"), tag: 5)
-        viewControllers = [startGameViewNav,gameDataViewNav,memberViewNav,checkerViewNav,systemViewNav]
+        viewControllers = [startGameViewNav,gameDataViewNav,memberViewNav,systemViewNav]
         
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.backgroundColor = UIColor(red: 244/255, green: 178/255, blue: 64/255, alpha: 1.0)

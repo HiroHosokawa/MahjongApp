@@ -40,8 +40,8 @@ class GameDataViewController: UIViewController {
     
     func setGameData() {
         let realm = try! Realm()
-//        let result = realm.objects(MemberDataModel.self)
-//        memberDataList = Array(result)
+        let result = realm.objects(MemberDataModel.self)
+        memberDataList = Array(result)
         let result2 = realm.objects(GameDataModel.self)
         gameDataList = Array(result2)
         
@@ -58,12 +58,12 @@ extension GameDataViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GameDataTableViewCell")as! GameDataTableViewCell
         
-        cell.gameMember1.text = memberDataList[indexPath.row].memberName
-        cell.gameMember2.text = memberDataList[indexPath.row].memberName
-        cell.gameMember3.text = memberDataList[indexPath.row].memberName
-        cell.gameMember4.text = memberDataList[indexPath.row].memberName
+        cell.gameMember1.text = memberDataList[0].memberName
+        cell.gameMember2.text = memberDataList[1].memberName
+        cell.gameMember3.text = memberDataList[2].memberName
+        cell.gameMember4.text = memberDataList[3].memberName
         cell.gameCount.text = "13局"
-       // cell.gameData = gameDataList[indexPath.row].date
+//        cell.gameData = Date
         
         return cell
     }

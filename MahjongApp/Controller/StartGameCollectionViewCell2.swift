@@ -30,7 +30,17 @@ class StartGameCollectionViewCell2: UICollectionViewCell {
         self.gameScoreType = gameScoreType
     }
     
-    
+    //リセットボタン押下時にスコアを白紙にする
+    func deletScore() {
+        inputScore.text = ""
+    }
+ 
+// スコアの＋ーに合わせて色を変更する
+//    func setTextColor(textField: UITextField) {
+//        let text = textField.text
+//        
+//        
+//    }
     
     func scoreLabel(_ text: String) {
         inputScore.text =  text
@@ -44,8 +54,9 @@ extension StartGameCollectionViewCell2: UITextFieldDelegate {
         shouldChangeCharactersIn range: NSRange,
         replacementString string: String
     ) -> Bool {
-        // 入力文字が数字以外の場合は入力を許可しない
-        let allowedCharacters = CharacterSet.decimalDigits
+
+        var allowedCharacters = CharacterSet.decimalDigits
+        allowedCharacters.insert("-")
         let characterSet = CharacterSet(charactersIn: string)
         return allowedCharacters.isSuperset(of: characterSet)
     }
@@ -62,6 +73,7 @@ extension StartGameCollectionViewCell2: UITextFieldDelegate {
             print("ok")
             print(score)
             print(index)
+            print(type(of: score))
         }
     }
 }

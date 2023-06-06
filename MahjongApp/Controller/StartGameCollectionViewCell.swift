@@ -14,6 +14,7 @@ class StartGameCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var matchName: UILabel!
     
     override func prepareForReuse() {
+        setborderColor()
         
         }
     
@@ -23,14 +24,20 @@ class StartGameCollectionViewCell: UICollectionViewCell {
     
     
     func setborderColor() {
-    let borderColor = UIColor(red: 255/255, green: 0.0/255, blue: 0.0/255, alpha: 1.0).cgColor
+        let borderColor = UIColor(red: 0.0/255, green: 0.0/255, blue: 0.0/255, alpha: 1.0).cgColor
     matchName.layer.borderColor = borderColor
+        matchName.layer.borderWidth = 1
+   
     }
         
         func setText(_ text: String?) {
             matchName.text = text
             
+            
         }
+    func setTextColor() {
+        matchName.textColor = UIColor.red
+    }
         
         func setBackgroundColor(_ color: UIColor) {
             contentView.backgroundColor = color

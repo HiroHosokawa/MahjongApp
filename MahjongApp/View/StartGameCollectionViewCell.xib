@@ -11,14 +11,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="4Bv-9m-rf7" customClass="StartGameCollectionViewCell" customModule="MahjongApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+            <rect key="frame" x="0.0" y="0.0" width="102" height="110"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="PPM-hw-G8V">
-                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                <rect key="frame" x="0.0" y="0.0" width="102" height="110"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bw8-TY-ggz">
-                        <rect key="frame" x="0.0" y="14.5" width="50" height="21"/>
+                        <rect key="frame" x="0.0" y="44.5" width="102" height="21"/>
                         <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -32,10 +32,11 @@
                     <constraint firstItem="bw8-TY-ggz" firstAttribute="leading" secondItem="PPM-hw-G8V" secondAttribute="leading" id="pV5-3X-nBL"/>
                 </constraints>
             </collectionViewCellContentView>
+            <size key="customSize" width="102" height="110"/>
             <connections>
                 <outlet property="matchName" destination="bw8-TY-ggz" id="SBl-24-xPe"/>
             </connections>
-            <point key="canvasLocation" x="128.98550724637681" y="-98.4375"/>
+            <point key="canvasLocation" x="179.71014492753625" y="-70.982142857142847"/>
         </collectionViewCell>
     </objects>
     <resources>

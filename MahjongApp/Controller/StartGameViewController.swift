@@ -22,21 +22,20 @@ enum LabelType: Int {
     case member = 0
     //合計値
     case sumScore = 1
-
 }
 
 class StartGameViewController: UIViewController {
-    var sampleMember: [String] = ["A","B","C","D","E"]
+    var sampleMember: [String] = ["未入力","未入力","未入力","未入力"]
     //対局者のデータ
-    var matchMember = [MemberDataModel](repeating: .init(), count: 5)
+    var matchMember = [MemberDataModel](repeating: .init(), count: 4)
     var collectionViewSection: [String] = ["対局メンバー","合計"]
     var collectionViewSection2: [String] = ["チップ入力欄","スコア入力欄"]
     /// 合計値のデータ.
-    private var totalData = [Int](repeating: 0, count: 5)
+    private var totalData = [Int](repeating: 0, count: 4)
     /// チップのデータ.
-    private var chipData = [ChipDataModel](repeating: .init(), count: 5)
+    private var chipData = [ChipDataModel](repeating: .init(), count: 4)
     /// スコアのデータ.
-    private var scoreData = [ScoreDataModel](repeating: .init(), count: 50)
+    private var scoreData = [ScoreDataModel](repeating: .init(), count: 40)
     
     //ツールバー
     var toolBar: UIToolbar {
@@ -112,31 +111,79 @@ class StartGameViewController: UIViewController {
         collectionView2!.register(nib3, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader")
     }
     
+    func checkScore()-> Bool {
+        var sum = 0
+        for i in 1 ... scoreData.count + 1 {
+            if scoreData[i - 1] != "" {
+            sum = sum + 1
+            }
+        }
+        return sum % 4 == 0
+    }
+    
     // ダイアログの保存Button処理.
     @objc func didTapSaveButton(_ sender: UIBarButtonItem) {
-        let alert = UIAlertController(
-            title: "対局の終了",
-            message: "対局を保存して終了します。よろしいですか？",
-            preferredStyle: .alert)
         
-        let add = UIAlertAction(
-            title: "保存",
-            style: .default,
-            handler: { [self] (action) -> Void in
-                let vc = GameDataViewController()
+        
+        //    TODO　タイトルが未入力の場合のアラート文を作成する
+        if matchMember.isEmpty
+        {
+            let alert = UIAlertController(
+                title: "入力不備があります",
+                message: "対局者を決定してください。",
+                preferredStyle: .alert)
             
-                self.saveRecord()
-                navigationController?.pushViewController(vc, animated: true)
-                print("OK")
+            let ok = UIAlertAction(
+                title: "OK",
+                style: .default,
+            handler: { (action) -> Void in
             })
-        
-        let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
-            print("Cancel button tapped")
-        })
-        
-        alert.addAction(add);
-        alert.addAction(cancel);
-        self.present(alert, animated: true, completion: nil)
+            alert.addAction(ok);
+            self.present(alert, animated: true, completion: nil)
+            
+        }else if checkScore() {
+            let alert = UIAlertController(
+                title: "入力不備があります",
+                message: "スコアが正しく入力されてるか確認してください。",
+                preferredStyle: .alert)
+            
+            let ok = UIAlertAction(
+                title: "OK",
+                style: .default,
+            handler: { (action) -> Void in
+            })
+            alert.addAction(ok);
+            self.present(alert, animated: true, completion: nil)
+            
+        }else {
+            
+            let alert = UIAlertController(
+                title: "対局の終了",
+                message: "対局を保存して終了します。よろしいですか？",
+                preferredStyle: .alert)
+            
+            let add = UIAlertAction(
+                title: "保存",
+                style: .default,
+                handler: { [self] (action) -> Void in
+                    let vc = GameDataViewController()
+                    
+                    self.saveRecord()
+                    navigationController?.pushViewController(vc, animated: true)
+                    print("OK")
+                })
+            
+            let cancel = UIAlertAction(
+                title: "キャンセル",
+                style: .cancel,
+                handler: { (action) -> Void in
+                print("Cancel button tapped")
+            })
+            
+            alert.addAction(add);
+            alert.addAction(cancel);
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     // ダイアログのキャンセルButton処理.
@@ -150,6 +197,11 @@ class StartGameViewController: UIViewController {
             title: "リセット",
             style: .default,
             handler: { (action) -> Void in
+                //TODOリセット処理の実装をする
+                
+                let startGameCollectionViewCell2 = StartGameCollectionViewCell2()
+                startGameCollectionViewCell2.deletScore()
+                
                 print("OK")
             })
         let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
@@ -242,11 +294,11 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
                 d += score.score
                 totalData[3] = d
                 
-            case 4:
-                // E列の合計を計算する(左から5番目)
-                e += score.score
-                totalData[4] = e
-                
+                //            case 4:
+                //                // E列の合計を計算する(左から5番目)
+                //                e += score.score
+                //                totalData[4] = e
+                //
             default:
                 break
             }
@@ -305,9 +357,9 @@ extension StartGameViewController: UICollectionViewDataSource {
         if collectionView.tag == 0 {
             switch(section){
             case 0:
-                return 5
+                return matchMember.count
             case 1:
-                return 5
+                return matchMember.count
             default:
                 print("error")
                 return 0
@@ -315,10 +367,10 @@ extension StartGameViewController: UICollectionViewDataSource {
         }else  {
             switch(section){
             case 0:
-                return 5
+                return matchMember.count
                 
             case 1:
-                return 50
+                return matchMember.count * 10
                 
                 
             default:
@@ -332,23 +384,26 @@ extension StartGameViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView.tag == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
-            
+            cell.setborderColor()
             switch(indexPath.section){
             case 0:
                 
                 let username2 = matchMember[indexPath.row].memberName
                 /// userneme2が空文字のときはサンプルメンバーを使う.
                 cell.setText(username2.isEmpty ? sampleMember[indexPath.row] : username2 )
-//                let memberData = MemberDataModel()
-//                let a = MemberViewController()
-//                a.setUserData()
-//                let username2 = memberData.memberName
-//                cell.setText(username2)
-               // cell.setBackgroundColor(.lightGray)
+                //                let memberData = MemberDataModel()
+                //                let a = MemberViewController()
+                //                a.setUserData()
+                //                let username2 = memberData.memberName
+                //                cell.setText(username2)
+                //                cell.setBackgroundColor(.lightGray)
+                
                 return cell
             case 1:
                 cell.setText(String(totalData[indexPath.row]))
-        
+                cell.setTextColor()
+                
+                
                 return cell
                 
             default:
@@ -401,18 +456,18 @@ extension StartGameViewController: UICollectionViewDelegateFlowLayout {
     //    セルのサイズを設定
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView.tag == 0 {
-            let width: CGFloat = UIScreen.main.bounds.width / 5
-            let height: CGFloat = UIScreen.main.bounds.height / 20
+            let width: CGFloat = UIScreen.main.bounds.width / CGFloat(matchMember.count)
+            let height: CGFloat = UIScreen.main.bounds.height / 15
             return CGSize(width: width, height: height)
         }else  {
-            let width: CGFloat = UIScreen.main.bounds.width / 5
-            let height: CGFloat = UIScreen.main.bounds.height / 20
+            let width: CGFloat = UIScreen.main.bounds.width / CGFloat(matchMember.count)
+            let height: CGFloat = UIScreen.main.bounds.height / 15
             return CGSize(width: width, height: height)
         }
-      
-       
+        
+        
     }
-//    セル列の余白の間隔調整
+    //    セル列の余白の間隔調整
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -437,10 +492,10 @@ extension StartGameViewController: UICollectionViewDelegateFlowLayout {
 extension StartGameViewController: SelectUserViewControllerDelegate  {
     func selectUserViewController(user: UserDataModel, index: IndexPath) {
         if collectionView.tag == 0 {
-//            matchMember[index.row] = user.userName
-//            print(user.userName)
-//            print(matchMember)
-//            print(matchMember[1])
+            //            matchMember[index.row] = user.userName
+            //            print(user.userName)
+            //            print(matchMember)
+            //            print(matchMember[1])
             let addMemberData = MemberDataModel()
             addMemberData.memberName = user.userName
             matchMember[index.row] = addMemberData
