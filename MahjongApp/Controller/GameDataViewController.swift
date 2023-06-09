@@ -13,9 +13,6 @@ class GameDataViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var gameDataList: [GameDataModel]  = []
-    var memberDataList: [MemberDataModel] = []
-    var scoreDataList: [ScoreDataModel] = []
-    var chipDataList: [ChipDataModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +37,6 @@ class GameDataViewController: UIViewController {
     
     func setGameData() {
         let realm = try! Realm()
-        let result = realm.objects(MemberDataModel.self)
-        memberDataList = Array(result)
         let result2 = realm.objects(GameDataModel.self)
         gameDataList = Array(result2)
         
@@ -58,13 +53,32 @@ extension GameDataViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GameDataTableViewCell")as! GameDataTableViewCell
         
-        cell.gameMember1.text = memberDataList[0].memberName
-        cell.gameMember2.text = memberDataList[1].memberName
-        cell.gameMember3.text = memberDataList[2].memberName
-        cell.gameMember4.text = memberDataList[3].memberName
-        cell.gameCount.text = "13局"
-//        cell.gameData = Date
-        
+        cell.gameMember1.text = gameDataList[indexPath.row].userNames[0].memberName
+        cell.gameMember2.text = gameDataList[indexPath.row].userNames[1].memberName
+        cell.gameMember3.text = gameDataList[indexPath.row].userNames[2].memberName
+        cell.gameMember4.text = gameDataList[indexPath.row].userNames[3].memberName
+        cell.gameCount.text = "\(gameDataList.count)局"
+        let a = gameDataList[indexPath.row].date
+       
+        let date = Calendar.current.startOfDay(for: a)
+        cell.gameData.text = "\(date)"
+        print(date)
         return cell
+    }
+}
+
+extension GameDataViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath){
+        if(editingStyle == UITableViewCell.EditingStyle.delete) {
+            do{
+                let realm = try Realm()
+                try realm.write {
+                    realm.delete(self.gameDataList[indexPath.row])
+                }
+                gameDataList.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+            }catch{
+            }
+        }
     }
 }

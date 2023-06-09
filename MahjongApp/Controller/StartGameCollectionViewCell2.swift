@@ -75,5 +75,9 @@ extension StartGameCollectionViewCell2: UITextFieldDelegate {
             print(index)
             print(type(of: score))
         }
+        //数値によって色の変更を実行する
+        if let text = textField.text, let number = Int(text) {
+            textField.textColor = number < 0 ? .red : number > 0 ? .blue : .black
+        }
     }
 }

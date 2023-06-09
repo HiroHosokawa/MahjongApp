@@ -19,7 +19,7 @@ class GameDataModel: Object {
     /// チップデータ.
     var chipData = List<ChipDataModel>()
     /// スコア.
-    var score = List<ScoreDataModel>()
+    var scoreData0 = List<ScoreDataModel>()
     
 }
 

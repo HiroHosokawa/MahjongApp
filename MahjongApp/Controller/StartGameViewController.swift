@@ -35,7 +35,8 @@ class StartGameViewController: UIViewController {
     /// チップのデータ.
     private var chipData = [ChipDataModel](repeating: .init(), count: 4)
     /// スコアのデータ.
-    private var scoreData = [ScoreDataModel](repeating: .init(), count: 40)
+    //private var scoreData = [[ScoreDataModel]](repeating: .init(), count: 10, )
+    var scoreData = [[ScoreDataModel]](repeating: [ScoreDataModel](repeating: .init(), count: 4), count: 10)
     
     //ツールバー
     var toolBar: UIToolbar {
@@ -78,7 +79,7 @@ class StartGameViewController: UIViewController {
         data = Array(result)
         
         if !data.isEmpty {
-            print(data[0].score[0].score, "テストです")
+            print(data[0].scoreData0[0].score, "テストです")
         }
     }
     
@@ -111,14 +112,23 @@ class StartGameViewController: UIViewController {
         collectionView2!.register(nib3, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader")
     }
     
-    func checkScore()-> Bool {
-        var sum = 0
-        for i in 1 ... scoreData.count + 1 {
-            if scoreData[i - 1] != "" {
-            sum = sum + 1
-            }
-        }
-        return sum % 4 == 0
+    //    func checkScore()-> Bool {
+    //        var sum = 0
+    //        for i in 1 ... scoreData.count + 1 {
+    //            if scoreData[i - 1] != "" {
+    //            sum = sum + 1
+    //            }
+    //        }
+    //        return sum % 4 == 0
+    //    }
+    
+    // todo リファクタリング可能　for in　文以外で
+    func checkMemberData() -> Bool {
+        for i in 1 ... matchMember.count {
+            if matchMember[i - 1].memberName == "" {
+                return true
+            }       }
+        return false
     }
     
     // ダイアログの保存Button処理.
@@ -126,7 +136,7 @@ class StartGameViewController: UIViewController {
         
         
         //    TODO　タイトルが未入力の場合のアラート文を作成する
-        if matchMember.isEmpty
+        if checkMemberData()
         {
             let alert = UIAlertController(
                 title: "入力不備があります",
@@ -136,26 +146,28 @@ class StartGameViewController: UIViewController {
             let ok = UIAlertAction(
                 title: "OK",
                 style: .default,
-            handler: { (action) -> Void in
-            })
+                handler: { (action) -> Void in
+                })
             alert.addAction(ok);
             self.present(alert, animated: true, completion: nil)
             
-        }else if checkScore() {
-            let alert = UIAlertController(
-                title: "入力不備があります",
-                message: "スコアが正しく入力されてるか確認してください。",
-                preferredStyle: .alert)
-            
-            let ok = UIAlertAction(
-                title: "OK",
-                style: .default,
-            handler: { (action) -> Void in
-            })
-            alert.addAction(ok);
-            self.present(alert, animated: true, completion: nil)
-            
-        }else {
+        }
+        //        else if checkScore() {
+        //            let alert = UIAlertController(
+        //                title: "入力不備があります",
+        //                message: "スコアが正しく入力されてるか確認してください。",
+        //                preferredStyle: .alert)
+        //
+        //            let ok = UIAlertAction(
+        //                title: "OK",
+        //                style: .default,
+        //            handler: { (action) -> Void in
+        //            })
+        //            alert.addAction(ok);
+        //            self.present(alert, animated: true, completion: nil)
+        //
+        //        }
+        else {
             
             let alert = UIAlertController(
                 title: "対局の終了",
@@ -177,8 +189,8 @@ class StartGameViewController: UIViewController {
                 title: "キャンセル",
                 style: .cancel,
                 handler: { (action) -> Void in
-                print("Cancel button tapped")
-            })
+                    print("Cancel button tapped")
+                })
             
             alert.addAction(add);
             alert.addAction(cancel);
@@ -219,13 +231,15 @@ extension StartGameViewController {
         //初期化
         let realm = try! Realm()
         try! realm.write {
-            let record = GameDataModel()
-            record.date = Date()
-            record.score.append(objectsIn: scoreData)
-            record.chipData.append(objectsIn: chipData)
-            record.userNames.append(objectsIn: matchMember)
-            realm.add(record)
-            print(record)
+            for row in scoreData {
+                let record = GameDataModel()
+                record.date = Date()
+                record.scoreData0.append(objectsIn: row)
+                record.chipData.append(objectsIn: chipData)
+                record.userNames.append(objectsIn: matchMember)
+                realm.add(record)
+                print(record)
+            }
         }
     }
 }
@@ -245,20 +259,23 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
             chipData[index] = addChipData
             
             print(chipData[0])
+            
         case .score:
+            let rowIndex = index / 4
+            let columnIndex = index % 4
             let addScoreData = ScoreDataModel()
             addScoreData.score = score
-            scoreData[index] = addScoreData
+            scoreData[rowIndex][columnIndex] = addScoreData
         }
         
         // ゲームスコアの計算をする
-        gameScoreCalculation()
+        gameScoreCalculation(index: index)
         // collectionViewのreload
         collectionView.reloadData()
     }
     
     /// ゲームスコアの計算をする
-    private func gameScoreCalculation() {
+    private func gameScoreCalculation(index: Int) {
         /// Aさん.
         var a = 0
         /// Bさん.
@@ -267,40 +284,42 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
         var c = 0
         /// Dさん.
         var d = 0
-        /// Eさん.
-        var e = 0
+        //        /// Eさん.
+        //        var e = 0
         
-        //0
         // TODO: ここのロジックはリファクタリングできる(優先度: 中)
-        for(index,score) in scoreData.enumerated() {
-            switch index % 5 {
-            case 0:
-                // A列の合計を計算する(左から1番目)
-                a += score.score
-                totalData[0] = a
-                
-            case 1:
-                // B列の合計を計算する(左から2番目)
-                b += score.score
-                totalData[1] = b
-                
-            case 2:
-                // C列の合計を計算する(左から3番目)
-                c += score.score
-                totalData[2] = c
-                
-            case 3:
-                // D列の合計を計算する(左から4番目)
-                d += score.score
-                totalData[3] = d
-                
-                //            case 4:
-                //                // E列の合計を計算する(左から5番目)
-                //                e += score.score
-                //                totalData[4] = e
-                //
-            default:
-                break
+        
+        for row in scoreData {
+            for(columnIndex,score) in row.enumerated() {
+                switch columnIndex {
+                case 0:
+                    // A列の合計を計算する(左から1番目)
+                    a += score.score
+                    totalData[0] = a
+                    
+                case 1:
+                    // B列の合計を計算する(左から2番目)
+                    b += score.score
+                    totalData[1] = b
+                    
+                case 2:
+                    // C列の合計を計算する(左から3番目)
+                    c += score.score
+                    totalData[2] = c
+                    
+                case 3:
+                    // D列の合計を計算する(左から4番目)
+                    d += score.score
+                    totalData[3] = d
+                    
+                    //            case 4:
+                    //                // E列の合計を計算する(左から5番目)
+                    //                e += element.score
+                    //                totalData[4] = e
+                    //
+                default:
+                    break
+                }
             }
         }
         for(index,_) in chipData.enumerated() {
@@ -325,10 +344,10 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
                 d += chipData[3].chip
                 totalData[3] = d
                 
-            case 4:
-                // E列のチップを計算する(左から5番目)
-                e += chipData[4].chip
-                totalData[4] = e
+                //            case 4:
+                //                // E列のチップを計算する(左から5番目)
+                //                e += chipData[4].chip
+                //                totalData[4] = e
                 
             default:
                 break
