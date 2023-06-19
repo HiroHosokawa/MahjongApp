@@ -1,3 +1,4 @@
+
 //
 //  CollectionViewCell.swift
 //  MahjongApp
@@ -8,41 +9,36 @@
 import UIKit
 import Foundation
 
-class StartGameCollectionViewCell: UICollectionViewCell {
+class StartGameCollectionViewCell3: UICollectionViewCell {
     
-    @IBOutlet weak var matchName: UILabel!
     
     @IBOutlet weak var totalName: UILabel!
+    
     override func prepareForReuse() {
-        setborderColor()
+        setborderColor2()
         
     }
     
     
-//    func editLabel() {
+//    func editLabel2() {
 //        let label = UILabel()
-//        let startGameViewController = StartGameViewController()
-//        let rabelHight = matchName.layer.bounds.width / 15
-//
-//        let rabelWidth = matchName.layer.bounds.width / CGFloat(startGameViewController.matchMember.count)
+//        label.frame = CGRect(x: 0, y: 0, width: 15, height: 15);_
 //    }
     
-    func setborderColor() {
+    func setborderColor2() {
         let borderColor = UIColor(red: 0.0/255, green: 0.0/255, blue: 0.0/255, alpha: 1.0).cgColor
-        matchName.layer.borderColor = borderColor
-        matchName.layer.borderWidth = 1
+        totalName.layer.borderColor = borderColor
+        totalName.layer.borderWidth = 1
         
     }
     
-    func setText(_ text: String?) {
-        matchName.text = text
-    }
+    
     func setText2(_ text: String?) {
         totalName.text = text
     }
     
     func setTextColor() {
-        if let number = Int(matchName.text ?? "") {
+        if let number = Int(totalName.text ?? "") {
             totalName.textColor = number < 0 ? .red : number > 0 ? .blue : .black
         }
     }

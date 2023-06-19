@@ -16,7 +16,7 @@ class GameDataViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // tableView.delegate = self
+        tableView.delegate = self
         tableView.dataSource = self
         tableView.register(
             UINib(nibName: "GameDataTableViewCell", bundle: nil), forCellReuseIdentifier: "GameDataTableViewCell")
@@ -25,6 +25,7 @@ class GameDataViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.reloadData()
         setGameData()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,17 +51,41 @@ extension GameDataViewController: UITableViewDataSource {
         
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 85
+}
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GameDataTableViewCell")as! GameDataTableViewCell
+        let startGameViewController = StartGameViewController()
+        
+        
+        
         
         cell.gameMember1.text = gameDataList[indexPath.row].userNames[0].memberName
         cell.gameMember2.text = gameDataList[indexPath.row].userNames[1].memberName
         cell.gameMember3.text = gameDataList[indexPath.row].userNames[2].memberName
         cell.gameMember4.text = gameDataList[indexPath.row].userNames[3].memberName
-        cell.gameCount.text = "\(gameDataList.count)局"
+        cell.gameCount.text = "\(gameDataList[indexPath.row].scoreData0.count / 4)局"
+        
+        cell.total1.text = "\(startGameViewController.totalData[0])"
+        cell.total2.text = "\(startGameViewController.totalData[1])"
+        cell.total3.text = "\(startGameViewController.totalData[2])"
+        cell.total4.text = "\(startGameViewController.totalData[3])"
+        
+        cell.chip1.text = "\(gameDataList[indexPath.row].chipData[0].chip)"
+        cell.chip2.text = "\(gameDataList[indexPath.row].chipData[1].chip)"
+        cell.chip3.text = "\(gameDataList[indexPath.row].chipData[2].chip)"
+        cell.chip4.text = "\(gameDataList[indexPath.row].chipData[3].chip)"
         let a = gameDataList[indexPath.row].date
        
-        let date = Calendar.current.startOfDay(for: a)
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        dateFormatter.dateFormat = "yyyy年MM月dd日"
+
+        let date = dateFormatter.string(from: a)
         cell.gameData.text = "\(date)"
         print(date)
         return cell

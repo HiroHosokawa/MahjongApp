@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="o73-IJ-GIh" customClass="StartGameCollectionViewCell3" customModule="MahjongApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="152" height="99"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="V3w-Rd-tnn">
+                <rect key="frame" x="0.0" y="0.0" width="152" height="99"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="total" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v98-I9-ZbK">
+                        <rect key="frame" x="0.0" y="39.5" width="152" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="v98-I9-ZbK" secondAttribute="trailing" id="49N-gg-SIE"/>
+                    <constraint firstItem="v98-I9-ZbK" firstAttribute="leading" secondItem="V3w-Rd-tnn" secondAttribute="leading" id="L8M-bf-Ya2"/>
+                    <constraint firstItem="v98-I9-ZbK" firstAttribute="centerY" secondItem="V3w-Rd-tnn" secondAttribute="centerY" id="a1h-S5-ceY"/>
+                    <constraint firstItem="v98-I9-ZbK" firstAttribute="centerX" secondItem="V3w-Rd-tnn" secondAttribute="centerX" id="jRw-2u-dg4"/>
+                </constraints>
+            </collectionViewCellContentView>
+            <size key="customSize" width="152" height="99"/>
+            <connections>
+                <outlet property="totalName" destination="v98-I9-ZbK" id="VM3-qD-jKV"/>
+            </connections>
+            <point key="canvasLocation" x="-1506" y="-323"/>
+        </collectionViewCell>
+    </objects>
+</document>

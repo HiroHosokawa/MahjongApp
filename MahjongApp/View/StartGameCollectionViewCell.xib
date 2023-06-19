@@ -17,8 +17,9 @@
                 <rect key="frame" x="0.0" y="0.0" width="102" height="110"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bw8-TY-ggz">
-                        <rect key="frame" x="0.0" y="44.5" width="102" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="member" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bw8-TY-ggz">
+                        <rect key="frame" x="0.0" y="45" width="102" height="20.5"/>
+                        <accessibility key="accessibilityConfiguration" identifier="a"/>
                         <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -36,7 +37,7 @@
             <connections>
                 <outlet property="matchName" destination="bw8-TY-ggz" id="SBl-24-xPe"/>
             </connections>
-            <point key="canvasLocation" x="179.71014492753625" y="-70.982142857142847"/>
+            <point key="canvasLocation" x="111.59420289855073" y="-152.00892857142856"/>
         </collectionViewCell>
     </objects>
     <resources>

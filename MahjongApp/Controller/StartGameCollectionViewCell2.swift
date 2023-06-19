@@ -32,7 +32,7 @@ class StartGameCollectionViewCell2: UICollectionViewCell {
     
     //リセットボタン押下時にスコアを白紙にする
     func deletScore() {
-        inputScore.text = ""
+     
     }
  
 // スコアの＋ーに合わせて色を変更する
@@ -70,10 +70,10 @@ extension StartGameCollectionViewCell2: UITextFieldDelegate {
                 index: index,
                 gameScoreType: gameScoreType
             )
-            print("ok")
-            print(score)
-            print(index)
-            print(type(of: score))
+//            print("ok")
+//            print(score)
+//            print(index)
+//            print(type(of: score))
         }
         //数値によって色の変更を実行する
         if let text = textField.text, let number = Int(text) {

@@ -16,6 +16,16 @@ class GameDataTableViewCell: UITableViewCell {
     @IBOutlet weak var gameMember3: UILabel!
     @IBOutlet weak var gameMember4: UILabel!
     
+    @IBOutlet weak var total1: UILabel!
+    @IBOutlet weak var total2: UILabel!
+    @IBOutlet weak var total3: UILabel!
+    @IBOutlet weak var total4: UILabel!
+    
+    @IBOutlet weak var chip1: UILabel!
+    @IBOutlet weak var chip2: UILabel!
+    @IBOutlet weak var chip3: UILabel!
+    @IBOutlet weak var chip4: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

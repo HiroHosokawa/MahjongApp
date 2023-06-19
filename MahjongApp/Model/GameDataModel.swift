@@ -21,6 +21,8 @@ class GameDataModel: Object {
     /// スコア.
     var scoreData0 = List<ScoreDataModel>()
     
+//    var memberScoreData = List<ScoreDataModel>()
+    
 }
 
 class MemberDataModel: Object {
