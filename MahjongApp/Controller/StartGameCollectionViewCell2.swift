@@ -45,7 +45,13 @@ class StartGameCollectionViewCell2: UICollectionViewCell {
     func scoreLabel(_ text: String) {
         inputScore.text =  text
     }
+    
+    func deletText() {
+        inputScore.text = ""
+    }
 }
+
+
 
 extension StartGameCollectionViewCell2: UITextFieldDelegate {
     /// textField入力制御のメソッド
@@ -60,6 +66,8 @@ extension StartGameCollectionViewCell2: UITextFieldDelegate {
         let characterSet = CharacterSet(charactersIn: string)
         return allowedCharacters.isSuperset(of: characterSet)
     }
+    
+    
     
     /// 入力が完了したら呼ばれる
     func textFieldDidEndEditing(_ textField: UITextField) {

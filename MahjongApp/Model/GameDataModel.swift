@@ -54,7 +54,7 @@ class ScoreDataModel: Object {
     /// id.
     @objc dynamic var id = UUID()
     /// スコア.
-    @objc dynamic var score: Int = 0
+    @Persisted var score: Int? 
 }
 
 //

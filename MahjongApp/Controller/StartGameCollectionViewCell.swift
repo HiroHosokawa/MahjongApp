@@ -34,6 +34,10 @@ class StartGameCollectionViewCell: UICollectionViewCell {
         
     }
     
+    
+    
+    
+    
     func setText(_ text: String?) {
         matchName.text = text
     }

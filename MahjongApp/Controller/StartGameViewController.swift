@@ -7,6 +7,7 @@
 import Foundation
 import UIKit
 import RealmSwift
+import SwiftUI
 
 // ゲームデータに関連するCellのセクションタイプ.
 // TODO: 最終的にはファイル移動する
@@ -74,13 +75,16 @@ class StartGameViewController: UIViewController {
     }
     //リセット機能の実装
     func resetData() {
+        //        let startGameCollectionViewCell = StartGameCollectionViewCell()
         self.matchMember = [MemberDataModel](repeating: .init(), count: 4)
         self.scoreData = [[ScoreDataModel]](repeating: [ScoreDataModel](repeating: .init(), count: 4), count: 10)
         self.chipData = [ChipDataModel](repeating: .init(), count: 4)
+        self.totalData = [Int](repeating: 0, count: 4)
         // UICollectionViewをリロードする
         self.collectionView3.reloadData()
         self.collectionView2.reloadData()
         self.collectionView.reloadData()
+        //            startGameCollectionViewCell.deletText()
     }
     
     // Realmデータに保存されているかチェックする(後で削除する).
@@ -93,7 +97,7 @@ class StartGameViewController: UIViewController {
         data = Array(result)
         
         if !data.isEmpty {
-            print(data[0].scoreData0[0].score, "テストです")
+            print(data[0].scoreData0[0].score!, "テストです")
         }
     }
     
@@ -265,14 +269,14 @@ extension StartGameViewController {
     func setRankScore() {
         var testData = [[Int]]()
         //スコアを順位に変換
-        for row in rankData {
-            let scores = row.map { $0.score }
-            let sortedScores = scores.sorted(by: >)
-            let ranks = scores.map { score in
-                sortedScores.firstIndex(of: score)! + 1
-            }
-            testData.append(ranks)
-        }
+        //        for row in rankData {
+        //            let scores = row.map { $0.score }
+        //            let sortedScores = scores.sorted(by: >)
+        //            let ranks = scores.map { score in
+        //                sortedScores.firstIndex(of: score)! + 1
+        //            }
+        //            testData.append(ranks)
+        //        }
         //空欄の配列を削除
         let filteredData = testData.filter { array in
             !array.allSatisfy { $0 == 1 }
@@ -294,7 +298,7 @@ extension StartGameViewController {
         }
         
         //メンバーのスコアを変換　仮
-        var test3Data = [[Int]]()
+        var test3Data = [[Int?]]()
         for row in scoreData {
             let scores = row.map { $0.score }
             test3Data.append(scores)
@@ -304,7 +308,7 @@ extension StartGameViewController {
             !array.allSatisfy { $0 == 0 }
         }
         
-        var test4Data: [Int] = []
+        var test4Data: [Int?] = []
         for row in testFilteredData {
             for test in row {
                 test4Data.append(test)
@@ -315,7 +319,7 @@ extension StartGameViewController {
         for (index, score) in test4Data.enumerated() {
             let row = index % 4
             let column = index / 4
-            memberScoreData[row][column] = score
+            memberScoreData[row][column] = score!
         }
         
         print(memberRankData)
@@ -360,7 +364,7 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
             let addChipData = ChipDataModel()
             addChipData.chip = score
             chipData[index] = addChipData
-             
+            
         case .score:
             let rowIndex = index / 4
             let columnIndex = index % 4
@@ -369,14 +373,15 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
             scoreData[rowIndex][columnIndex] = addScoreData
             memberScore[columnIndex][rowIndex] = addScoreData
             rankData[rowIndex][columnIndex] = addScoreData
-            print(memberScore[2][1])
+            checkTest(index: index)
+//            print(memberScore[2][1])
         }
         
         // ゲームスコアの計算をする
         gameScoreCalculation(index: index)
         // collectionViewのreload
         collectionView3.reloadData()
-        print(self.checkMemberData())
+        
     }
     
     
@@ -386,29 +391,47 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
         
         var scoreDataModel: [ScoreDataModel] = []
         
-        let test = scoreData[rowIndex].map ({ $0.score ?? 0 })
+        let test = scoreData[rowIndex].map { $0.score ?? 0 }
+        print(test)
+        
         
         //空欄が1つだけか判定
         if let emptyIndex = test.firstIndex(of: 0), test.filter({ $0 != 0 }).count == test.count - 1 {
-            let total = test.reduce(0, +)
+            let total = -test.reduce(0, +)
             for (index, score) in test.enumerated() {
                 let test2 = ScoreDataModel()
                 test2.score = (index == emptyIndex) ? total : score
                 scoreDataModel.append(test2)
-                print(total)
-                collectionView2.reloadData()
+                print("合計は\(total)")
+                print("空のインデックス番号は\(emptyIndex)")
+                //collectionViewCell2に反映させる
+                collectionView2.performBatchUpdates({
+                    let indexPath = IndexPath(item: emptyIndex, section: 0)
+                    collectionView2.reloadItems(at: [indexPath]) //
+                }, completion: { _ in
+                    let alert = UIAlertController(title: "\(total)を\(self.matchMember[emptyIndex].memberName)さんに入力してください。", message: "", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                })
+                //                collectionView2.reloadData()
             }
         } else {
             for score in test {
                 let test2 = ScoreDataModel()
                 test2.score = score
                 scoreDataModel.append(test2)
-                print(score)
-                collectionView2.reloadData()
+                print("入力された数字は\(score)")
+                print("入力されたインデックス番号は\(index)")
+                //collectionViewCell2に反映させる
+                collectionView2.performBatchUpdates({
+                    let indexPath = IndexPath(item: index, section: 0)
+                    collectionView2.reloadItems(at: [indexPath]) //
+                }, completion: nil)
+//                collectionView2.reloadData()
             }
         }
-        
         scoreData[rowIndex] = scoreDataModel
+        
     }
     //
     //    func checkTest(rowIndex: Int) {
@@ -445,22 +468,22 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
                 switch columnIndex {
                 case 0:
                     // A列の合計を計算する(左から1番目)
-                    a += score.score
+                    a += score.score ?? 0
                     totalData[0] = a
                     
                 case 1:
                     // B列の合計を計算する(左から2番目)
-                    b += score.score
+                    b += score.score ?? 0
                     totalData[1] = b
                     
                 case 2:
                     // C列の合計を計算する(左から3番目)
-                    c += score.score
+                    c += score.score ?? 0
                     totalData[2] = c
                     
                 case 3:
                     // D列の合計を計算する(左から4番目)
-                    d += score.score
+                    d += score.score ?? 0
                     totalData[3] = d
                     
                     //            case 4:
@@ -552,7 +575,7 @@ extension StartGameViewController: UICollectionViewDataSource {
         if collectionView.tag == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
             cell.setborderColor()
- //           cell.editLabel()
+            //           cell.editLabel()
             let username2 = matchMember[indexPath.row].memberName
             /// userneme2が空文字のときはサンプルメンバーを使う.
             cell.setText(username2.isEmpty ? sampleMember[indexPath.row] : username2 )
@@ -567,11 +590,11 @@ extension StartGameViewController: UICollectionViewDataSource {
             
         } else if collectionView.tag == 2 {
             let cell = collectionView3.dequeueReusableCell(withReuseIdentifier: "Cell3", for: indexPath) as! StartGameCollectionViewCell3
+            cell.deletText()
             cell.setborderColor2()
             // cell.editLabel2()
             cell.setText2(String(totalData[indexPath.row]))
             cell.setTextColor()
-            
             
             return cell
             
@@ -584,6 +607,7 @@ extension StartGameViewController: UICollectionViewDataSource {
             
             cell.inputScore.inputAccessoryView = toolBar
             cell.delegate = self
+            cell.deletText()
             
             if let gameScoreType = GameScoreType(rawValue: indexPath.section) {
                 cell.setUp(index: indexPath.row, gameScoreType: gameScoreType)

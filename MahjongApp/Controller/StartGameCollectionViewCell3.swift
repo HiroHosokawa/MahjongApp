@@ -25,6 +25,10 @@ class StartGameCollectionViewCell3: UICollectionViewCell {
 //        label.frame = CGRect(x: 0, y: 0, width: 15, height: 15);_
 //    }
     
+    func deletText() {
+        totalName.text = ""
+    }
+    
     func setborderColor2() {
         let borderColor = UIColor(red: 0.0/255, green: 0.0/255, blue: 0.0/255, alpha: 1.0).cgColor
         totalName.layer.borderColor = borderColor
