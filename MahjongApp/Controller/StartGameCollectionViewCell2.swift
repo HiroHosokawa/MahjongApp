@@ -22,13 +22,26 @@ class StartGameCollectionViewCell2: UICollectionViewCell {
     
     override func awakeFromNib() {
             super.awakeFromNib()
+        self.inputScore.keyboardType = .numbersAndPunctuation
     }
     /// cellの初期化処理.
-    func setUp(index: Int, gameScoreType: GameScoreType) {
+    func setUp(index: Int, gameScoreType: GameScoreType, label: String) {
         inputScore.delegate = self
         self.index = index
         self.gameScoreType = gameScoreType
+        scoreLabel(label)
+        setColoer()
     }
+    
+    func scoreLabel(_ text: String) {
+        inputScore.text = ""
+        inputScore.text =  text
+    }
+    // "-" ボタンがタップされたときの処理
+//    func insertMinusSign() {
+//            // textFieldに "-" を挿入する
+//            inputScore!.insertText("-")
+//        }
     
     //リセットボタン押下時にスコアを白紙にする
     func deletScore() {
@@ -42,16 +55,18 @@ class StartGameCollectionViewCell2: UICollectionViewCell {
 //        
 //    }
     
-    func scoreLabel(_ text: String) {
-        inputScore.text =  text
-    }
+    
     
     func deletText() {
         inputScore.text = ""
     }
+
+func setColoer(){
+if let text = inputScore.text, let number = Int(text) {
+    inputScore.textColor = number < 0 ? .red : number > 0 ? .blue : .black
 }
-
-
+}
+}
 
 extension StartGameCollectionViewCell2: UITextFieldDelegate {
     /// textField入力制御のメソッド
@@ -83,9 +98,10 @@ extension StartGameCollectionViewCell2: UITextFieldDelegate {
 //            print(index)
 //            print(type(of: score))
         }
+        setColoer()
         //数値によって色の変更を実行する
-        if let text = textField.text, let number = Int(text) {
-            textField.textColor = number < 0 ? .red : number > 0 ? .blue : .black
-        }
+//        if let text = textField.text, let number = Int(text) {
+//            textField.textColor = number < 0 ? .red : number > 0 ? .blue : .black
+ //       }
     }
 }

@@ -21,7 +21,7 @@ class GameDataViewController: UIViewController {
         tableView.register(
             UINib(nibName: "GameDataTableViewCell", bundle: nil), forCellReuseIdentifier: "GameDataTableViewCell")
         setNavigationBarButton()
-        self.title = "対局履歴"
+        self.title = "履歴"
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.reloadData()
         setGameData()
@@ -57,7 +57,6 @@ extension GameDataViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GameDataTableViewCell")as! GameDataTableViewCell
-        let startGameViewController = StartGameViewController()
         
         
         
@@ -66,17 +65,18 @@ extension GameDataViewController: UITableViewDataSource {
         cell.gameMember2.text = gameDataList[indexPath.row].userNames[1].memberName
         cell.gameMember3.text = gameDataList[indexPath.row].userNames[2].memberName
         cell.gameMember4.text = gameDataList[indexPath.row].userNames[3].memberName
-        cell.gameCount.text = "\(gameDataList[indexPath.row].scoreData0.count / 4)局"
+      //  cell.gameCount.text = "\(gameDataList[indexPath.row].gamecount ?? 0)局"
+       // print(gameDataList[indexPath.row].gamecount ?? 0)
         
-        cell.total1.text = "\(startGameViewController.totalData[0])"
-        cell.total2.text = "\(startGameViewController.totalData[1])"
-        cell.total3.text = "\(startGameViewController.totalData[2])"
-        cell.total4.text = "\(startGameViewController.totalData[3])"
+        cell.total1.text = "\(gameDataList[indexPath.row].totalScoreData[0].score ?? 0)"
+        cell.total2.text = "\(gameDataList[indexPath.row].totalScoreData[1].score ?? 0)"
+        cell.total3.text = "\(gameDataList[indexPath.row].totalScoreData[2].score ?? 0)"
+        cell.total4.text = "\(gameDataList[indexPath.row].totalScoreData[3].score ?? 0)"
         
-        cell.chip1.text = "\(gameDataList[indexPath.row].chipData[0].chip)"
-        cell.chip2.text = "\(gameDataList[indexPath.row].chipData[1].chip)"
-        cell.chip3.text = "\(gameDataList[indexPath.row].chipData[2].chip)"
-        cell.chip4.text = "\(gameDataList[indexPath.row].chipData[3].chip)"
+        cell.chip1.text = "\(gameDataList[indexPath.row].chipData[0].chip ?? 0)"
+        cell.chip2.text = "\(gameDataList[indexPath.row].chipData[1].chip ?? 0)"
+        cell.chip3.text = "\(gameDataList[indexPath.row].chipData[2].chip ?? 0)"
+        cell.chip4.text = "\(gameDataList[indexPath.row].chipData[3].chip ?? 0)"
         let a = gameDataList[indexPath.row].date
        
         let dateFormatter = DateFormatter()
@@ -87,7 +87,6 @@ extension GameDataViewController: UITableViewDataSource {
 
         let date = dateFormatter.string(from: a)
         cell.gameData.text = "\(date)"
-        print(date)
         return cell
     }
 }
@@ -105,5 +104,14 @@ extension GameDataViewController: UITableViewDelegate {
             }catch{
             }
         }
+    }
+    
+
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+            let vc = StartGameViewController()
+            tableView.deselectRow(at: indexPath, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
+
     }
 }

@@ -40,9 +40,10 @@ class StartGameCollectionViewCell: UICollectionViewCell {
     
     func setText(_ text: String?) {
         matchName.text = text
-    }
-    func setText2(_ text: String?) {
-        totalName.text = text
+        //ラベルの高さ処理
+        matchName.translatesAutoresizingMaskIntoConstraints = false
+            matchName.numberOfLines = 0
+            matchName.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     func setTextColor() {

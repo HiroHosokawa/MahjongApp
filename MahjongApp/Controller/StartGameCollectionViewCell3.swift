@@ -27,6 +27,10 @@ class StartGameCollectionViewCell3: UICollectionViewCell {
     
     func deletText() {
         totalName.text = ""
+        //ラベルの高さ処理
+        totalName.translatesAutoresizingMaskIntoConstraints = false
+            totalName.numberOfLines = 0
+            totalName.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     func setborderColor2() {

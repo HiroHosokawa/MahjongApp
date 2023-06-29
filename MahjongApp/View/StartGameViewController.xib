@@ -60,6 +60,9 @@
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <accessibility key="accessibilityConfiguration">
+                <accessibilityTraits key="traits" notEnabled="YES"/>
+            </accessibility>
             <constraints>
                 <constraint firstItem="0Ew-8E-5OI" firstAttribute="trailing" secondItem="JGW-wu-dqX" secondAttribute="trailing" id="A6T-cV-YEu"/>
                 <constraint firstItem="JGW-wu-dqX" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="I30-6m-9Ge"/>

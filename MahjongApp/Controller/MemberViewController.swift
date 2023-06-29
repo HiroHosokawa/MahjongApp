@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 var addButtonItem: UIBarButtonItem!
-let userData = UserDataModel()
+let userData = UserMasterDataModel()
 
 
 class MemberViewController: UIViewController {
@@ -41,12 +41,12 @@ class MemberViewController: UIViewController {
     
     func setUserData() {
         let realm = try! Realm()
-        let result = realm.objects(UserDataModel.self)
+        let result = realm.objects(UserMasterDataModel.self)
         userDataList = Array(result)
         tableView.reloadData()
     }
     
-    var userDataList: [UserDataModel] = []
+    var userDataList: [UserMasterDataModel] = []
     
     @objc func didTapAddButton(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "面子の追加", message: "名前を入力してください。", preferredStyle: .alert)
