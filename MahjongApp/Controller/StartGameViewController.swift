@@ -25,12 +25,18 @@ enum GameScoreType: Int {
 //    case sumScore = 1
 //}
 
+protocol GameDataViewControllerDelegate: AnyObject {
+    func selectUserViewController( index: IndexPath)
+}
 class StartGameViewController: UIViewController {
     
+    weak var delegate: GameDataViewControllerDelegate?
+    var index: IndexPath?
     var test = false
     var sampleMember: [String] = ["未入力","未入力","未入力","未入力"]
     //対局者のデータ
     var matchMember = [UserMasterDataModel](repeating: .init(), count: 4)
+    var sampleMatchMember = [MemberDataModel](repeating: .init(), count: 4)
     var collectionViewSection: [String] = ["対局メンバー"]
     var collectionViewSection2: [String] = ["チップ入力欄","スコア入力欄"]
     var collectionViewSection3: [String] = ["合計"]
@@ -90,10 +96,44 @@ class StartGameViewController: UIViewController {
         // **テスト**
         // Realmデータに保存されているかチェックする(後で削除する)
 //        checkTestSavedScoreData()
-//        if test {
-//            self.chipData = 
-//        }
+        //履歴データからの参照
+        setViewData()
         
+  
+    }
+    func setViewData(){
+        if test {
+            let a = self.index!
+            let realm = try! Realm()
+            let gameData = realm.objects(GameDataModel.self).first
+            
+            if let gameData = gameData {
+                //Listを配列に変換
+                let userNamesArray = Array(gameData.userNames)
+                let chipDataArray = Array(gameData.chipData)
+                let scoreData0Array = Array(gameData.scoreData0)
+                let totalScoreDataArray = Array(gameData.totalScoreData)
+                let intTotalDataArray = totalScoreDataArray.map { $0.score ?? 0 }
+                //日付を表示
+                let dateFormatter = DateFormatter()
+                dateFormatter.calendar = Calendar(identifier: .gregorian)
+                dateFormatter.locale = Locale(identifier: "ja_JP")
+                dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+                dateFormatter.dateFormat = "yyyy年MM月dd日"
+                let date = dateFormatter.string(from: gameData.date)
+                self.title = "\(date)"
+                //初期値をrealmデータに変換
+                self.chipData = chipDataArray
+//                self.scoreData = scoreData0Array
+                self.totalData = intTotalDataArray
+                self.sampleMatchMember = userNamesArray
+                self.collectionView2.reloadData()
+                print(gameData)
+                print("\(a)が渡されたインデックス番号")
+                //TODOスコアデータを行列に変換、対局者をuserMasterData型に変換
+                
+            }
+        }
     }
     //リセット機能の実装
     func resetData() {
@@ -111,17 +151,16 @@ class StartGameViewController: UIViewController {
     
     // Realmデータに保存されているかチェックする(後で削除する).
     // 一番左のスコア入力欄の数字をPrint出力する.
-    func checkTestSavedScoreData() {
-        let realm = try! Realm()
-        var data: [GameDataModel] = []
-        let result = realm.objects(GameDataModel.self)
-        
-        data = Array(result)
-        
-        if !data.isEmpty {
-            print(data[0].scoreData0[0].score!, "テストです")
-        }
-    }
+//    func checkTestSavedScoreData() {
+//        let realm = try! Realm()
+//        var data: [GameDataModel] = []
+//        let result = realm.objects(GameDataModel.self)
+//
+//
+//        data = Array(result)
+//        print(data[0], "テストです")
+//
+//    }
     
     init() {
         super.init(nibName: String(describing: StartGameViewController.self), bundle: nil)
@@ -169,10 +208,10 @@ class StartGameViewController: UIViewController {
     
     // todo リファクタリング可能　for in　文以外で
     func checkMemberData() -> Bool {
-        //        for i in 1 ... matchMember.count {
-        //            if matchMember[i - 1].memberName == "" {
-        //                return true
-        //            }       }
+                for i in 1 ... matchMember.count {
+                    if matchMember[i - 1].userName == "" {
+                        return true
+                    }       }
         return false
     }
     
@@ -397,7 +436,7 @@ extension StartGameViewController {
             // ユーザーネーム
             record.userNames.append(objectsIn: userNames)
             // 対局数
-         //   record.gamecount = count
+            record.gamecount = count
             // トータルデータ
             record.totalScoreData.append(objectsIn: totalScoreData)
             realm.add(record)
@@ -795,6 +834,8 @@ extension StartGameViewController: SelectUserViewControllerDelegate  {
         }
     }
 }
+
+
 
 extension StartGameViewController {
     /// スコアデータをコンバートする

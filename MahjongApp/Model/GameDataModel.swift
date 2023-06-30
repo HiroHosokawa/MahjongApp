@@ -15,7 +15,7 @@ class GameDataModel: Object {
     /// 日付.
     @objc dynamic var date = Date()
     
- //   @Persisted var gamecount: Int?
+    @objc dynamic var gamecount = Int()
     /// ユーザーネーム.
     var userNames = List<MemberDataModel>()
     /// チップデータ.

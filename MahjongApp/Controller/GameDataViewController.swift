@@ -14,6 +14,8 @@ class GameDataViewController: UIViewController {
     
     var gameDataList: [GameDataModel]  = []
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -65,8 +67,8 @@ extension GameDataViewController: UITableViewDataSource {
         cell.gameMember2.text = gameDataList[indexPath.row].userNames[1].memberName
         cell.gameMember3.text = gameDataList[indexPath.row].userNames[2].memberName
         cell.gameMember4.text = gameDataList[indexPath.row].userNames[3].memberName
-      //  cell.gameCount.text = "\(gameDataList[indexPath.row].gamecount ?? 0)局"
-       // print(gameDataList[indexPath.row].gamecount ?? 0)
+        cell.gameCount.text = "\(gameDataList[indexPath.row].gamecount)局"
+        print(gameDataList[indexPath.row].gamecount)
         
         cell.total1.text = "\(gameDataList[indexPath.row].totalScoreData[0].score ?? 0)"
         cell.total2.text = "\(gameDataList[indexPath.row].totalScoreData[1].score ?? 0)"
@@ -110,6 +112,9 @@ extension GameDataViewController: UITableViewDelegate {
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
             let vc = StartGameViewController()
+            vc.test = true
+            vc.index = indexPath
+            
             tableView.deselectRow(at: indexPath, animated: true)
             navigationController?.pushViewController(vc, animated: true)
 
