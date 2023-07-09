@@ -21,7 +21,7 @@ class GameDataModel: Object {
     /// チップデータ.
     var chipData = List<ChipDataModel>()
     /// スコア.
-    var scoreData0 = List<ScoreDataModel>()
+    var scoreData = List<ScoreDataModel>()
     //トータルスコア
     var totalScoreData = List<ScoreDataModel>()
     
@@ -34,6 +34,13 @@ class MemberDataModel: Object {
     @objc dynamic var id = UUID()
     /// ユーザー名.
     @objc dynamic var memberName = ""
+    
+    func convert(data: MemberDataModel) -> UserMasterDataModel {
+        let userMasterData = UserMasterDataModel()
+        userMasterData.id = data.id
+        userMasterData.userName = data.memberName
+        return userMasterData
+    }
 }
 
 /// チップデータ.

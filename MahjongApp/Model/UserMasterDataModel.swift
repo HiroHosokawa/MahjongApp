@@ -12,6 +12,8 @@ import RealmSwift
 class UserMasterDataModel: Object {
     /// id.
     @Persisted var id = UUID()
+    /// 日付.
+    @objc dynamic var date = Date()
     /// ユーザー名.
     @Persisted var userName = ""
     /// ユーザーマスタスコア
