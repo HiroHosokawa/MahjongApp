@@ -24,10 +24,7 @@ class StartGameCollectionViewCell2: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.inputScore.keyboardType = .numbersAndPunctuation
-        
     }
-    
-   
     /// cellの初期化処理.
     func setUp(index: Int, gameScoreType: GameScoreType, label: String, check: Bool) {
         inputScore.delegate = self
@@ -42,25 +39,10 @@ class StartGameCollectionViewCell2: UICollectionViewCell {
         inputScore.text = ""
         inputScore.text =  text
     }
-    // "-" ボタンがタップされたときの処理
-    //    func insertMinusSign() {
-    //            // textFieldに "-" を挿入する
-    //            inputScore!.insertText("-")
-    //        }
     
     //リセットボタン押下時にスコアを白紙にする
     func deletScore() {
-        
     }
-    
-    // スコアの＋ーに合わせて色を変更する
-    //    func setTextColor(textField: UITextField) {
-    //        let text = textField.text
-    //
-    //
-    //    }
-    
-    
     
     func deletText() {
         inputScore.text = ""
@@ -95,15 +77,6 @@ extension StartGameCollectionViewCell2: UITextFieldDelegate {
                 index: index,
                 gameScoreType: gameScoreType
             )
-            //            print("ok")
-            //            print(score)
-            //            print(index)
-            //            print(type(of: score))
         }
-        setColoer()
-        //数値によって色の変更を実行する
-        //        if let text = textField.text, let number = Int(text) {
-        //            textField.textColor = number < 0 ? .red : number > 0 ? .blue : .black
-        //       }
     }
 }

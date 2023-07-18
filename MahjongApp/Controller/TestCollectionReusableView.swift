@@ -10,8 +10,4 @@ import UIKit
 class TestCollectionReusableView: UICollectionReusableView {
     
     @IBOutlet weak var sectionLabel: UILabel!
-    
-    
-    
-    
 }

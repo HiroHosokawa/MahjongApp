@@ -49,8 +49,6 @@ class SelectUserViewController: UIViewController{
     
     var userDataList: [UserMasterDataModel] = []
     
-    
-    
     // 重複チェック
     func checkName(_ userName: String) -> Bool {
         let realm = try! Realm()
@@ -114,7 +112,6 @@ extension SelectUserViewController: UITableViewDataSource {
         cell.contentConfiguration = config
         return cell
     }
-    
 }
 
 extension SelectUserViewController: UITableViewDelegate {

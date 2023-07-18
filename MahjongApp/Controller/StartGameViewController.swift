@@ -18,13 +18,6 @@ enum GameScoreType: Int {
     case score = 1
 }
 
-//enum LabelType: Int {
-//    //対局者
-//    case member = 0
-//    //合計値
-//    case sumScore = 1
-//}
-
 protocol GameDataViewControllerDelegate: AnyObject {
     func selectUserViewController( index: IndexPath)
 }
@@ -38,7 +31,7 @@ class StartGameViewController: UIViewController {
     var sampleMember: [String] = ["未入力","未入力","未入力","未入力"]
     //対局者のデータ
     var matchMember = [UserMasterDataModel](repeating: .init(), count: 4)
-    var sampleMatchMember = [MemberDataModel](repeating: .init(), count: 4)
+    //セクションタイトル
     var collectionViewSection: [String] = ["対局メンバー"]
     var collectionViewSection2: [String] = ["チップ入力欄","スコア入力欄"]
     var collectionViewSection3: [String] = ["合計"]
@@ -59,25 +52,9 @@ class StartGameViewController: UIViewController {
         let toolBarRect = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35)
         let toolBar = UIToolbar(frame: toolBarRect)
         let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTupDone))
-        
-        // "-" ボタンのカスタムビューを作成
-        //            let minusButton = UIButton(type: .system)
-        //            minusButton.setTitle("-", for: .normal)
-        //            minusButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-        //            minusButton.addTarget(self, action: #selector(didTupMinus), for: .touchUpInside)
-        //            let minusButtonItem = UIBarButtonItem(customView: minusButton)
-        //        // 余白を追加
-        //           let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        
         toolBar.setItems([doneItem], animated: true)
         return toolBar
     }
-    
-    //    @objc func didTupMinus() {
-    //        let startGameCollectionViewCell2 = StartGameCollectionViewCell2()
-    //
-    //        startGameCollectionViewCell2.insertMinusSign()
-    //    }
     
     @objc func didTupDone() {
         view.endEditing(true)
@@ -96,15 +73,11 @@ class StartGameViewController: UIViewController {
         // CollectionViewをセットする
         setCollectionViews()
         self.title = "対局"
-        // **テスト**
-        // Realmデータに保存されているかチェックする(後で削除する)
-        //        checkTestSavedScoreData()
-        //履歴データからの参照
-//        setViewData()
+        //閲覧用のデータをセットする
         setViewData2()
     }
     
-    
+    //閲覧用のデータを表示
     func setViewData2() {
         guard let data = histryDataModel else {
             return
@@ -118,6 +91,15 @@ class StartGameViewController: UIViewController {
         self.chipData = data.chipData.compactMap({ $0
         })
         self.scoreData = test(data: data)
+        
+        //日付を表示
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        dateFormatter.dateFormat = "yyyy年MM月dd日"
+        let date = dateFormatter.string(from: data.date)
+        self.title = "\(date)"
     }
     
     func test(data: GameDataModel) -> [[ScoreDataModel]] {
@@ -132,67 +114,68 @@ class StartGameViewController: UIViewController {
         return score
     }
     
-    func setViewData(){
-        if test {
-            let index = self.index!.row
-            
-            
-            let realm = try! Realm()
-            let gameData = realm.objects(GameDataModel.self)
-            
-            //Listを配列に変換
-            let userNamesArray = Array(gameData[index].userNames)
-            let chipDataArray = Array(gameData[index].chipData)
-            let scoreDataArray = Array(gameData[index].scoreData)
-            let totalScoreDataArray = Array(gameData[index].totalScoreData)
-            let intTotalDataArray = totalScoreDataArray.map { $0.score ?? 0 }
-            
-            //対局者の型変換
-            var memberArray: [UserMasterDataModel] = []
-            for memberDataModel in userNamesArray {
-                let userMasterDataModel = UserMasterDataModel()
-                userMasterDataModel.userName = memberDataModel.memberName
-                memberArray.append(userMasterDataModel)
-            }
-            //スコアの型変換
-            var scoreArray: [[ScoreDataModel]] = [[]]
-            for rowIndex in 0..<10 {
-                var row: [ScoreDataModel] = []
-                for columnIndex in 0..<4 {
-                    let index = rowIndex * 10 + columnIndex
-                    if index < scoreDataArray.count {
-                        let element = scoreDataArray[index]
-                        row.append(element)
-                    }
-                }
-                scoreArray.append(row)
-                print(scoreArray)
-            }
-            
-            //日付を表示
-            let dateFormatter = DateFormatter()
-            dateFormatter.calendar = Calendar(identifier: .gregorian)
-            dateFormatter.locale = Locale(identifier: "ja_JP")
-            dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
-            dateFormatter.dateFormat = "yyyy年MM月dd日"
-            let date = dateFormatter.string(from: gameData[index].date)
-            self.title = "\(date)"
-            
-            //初期値をrealmから取得したデータに変換して表示
-            self.chipData = chipDataArray
-//            self.scoreData = scoreArray
-            self.totalData = intTotalDataArray
-            self.matchMember = memberArray
-            
-            self.collectionView2.reloadData()
-            self.collectionView.reloadData()
-            print(scoreArray)
-            //              print(gameData)
-            //             print("\(a)が渡されたインデックス番号")
-            //TODOスコアデータを行列に変換、対局者をuserMasterData型に変換
-            
-        }
-    }
+    //閲覧用のデータを表示
+    //    func setViewData(){
+    //        if test {
+    //            let index = self.index!.row
+    //
+    //
+    //            let realm = try! Realm()
+    //            let gameData = realm.objects(GameDataModel.self)
+    //
+    //            //Listを配列に変換
+    //            let userNamesArray = Array(gameData[index].userNames)
+    //            let chipDataArray = Array(gameData[index].chipData)
+    //            let scoreDataArray = Array(gameData[index].scoreData)
+    //            let totalScoreDataArray = Array(gameData[index].totalScoreData)
+    //            let intTotalDataArray = totalScoreDataArray.map { $0.score ?? 0 }
+    //
+    //            //対局者の型変換
+    //            var memberArray: [UserMasterDataModel] = []
+    //            for memberDataModel in userNamesArray {
+    //                let userMasterDataModel = UserMasterDataModel()
+    //                userMasterDataModel.userName = memberDataModel.memberName
+    //                memberArray.append(userMasterDataModel)
+    //            }
+    //            //スコアの型変換
+    //            var scoreArray: [[ScoreDataModel]] = [[]]
+    //            for rowIndex in 0..<10 {
+    //                var row: [ScoreDataModel] = []
+    //                for columnIndex in 0..<4 {
+    //                    let index = rowIndex * 10 + columnIndex
+    //                    if index < scoreDataArray.count {
+    //                        let element = scoreDataArray[index]
+    //                        row.append(element)
+    //                    }
+    //                }
+    //                scoreArray.append(row)
+    //
+    //            }
+    //
+    //            //日付を表示
+    //            let dateFormatter = DateFormatter()
+    //            dateFormatter.calendar = Calendar(identifier: .gregorian)
+    //            dateFormatter.locale = Locale(identifier: "ja_JP")
+    //            dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+    //            dateFormatter.dateFormat = "yyyy年MM月dd日"
+    //            let date = dateFormatter.string(from: gameData[index].date)
+    //            self.title = "\(date)"
+    //
+    //            //初期値をrealmから取得したデータに変換して表示
+    //            self.chipData = chipDataArray
+    ////            self.scoreData = scoreArray
+    //            self.totalData = intTotalDataArray
+    //            self.matchMember = memberArray
+    //
+    //            self.collectionView2.reloadData()
+    //            self.collectionView.reloadData()
+    //
+    //            //              print(gameData)
+    //            //             print("\(a)が渡されたインデックス番号")
+    //            //TODOスコアデータを行列に変換、対局者をuserMasterData型に変換
+    //
+    //        }
+    //    }
     
     //リセット機能の実装
     func resetData() {
@@ -208,19 +191,7 @@ class StartGameViewController: UIViewController {
         //            startGameCollectionViewCell.deletText()
     }
     
-    // Realmデータに保存されているかチェックする(後で削除する).
-    // 一番左のスコア入力欄の数字をPrint出力する.
-    //    func checkTestSavedScoreData() {
-    //        let realm = try! Realm()
-    //        var data: [GameDataModel] = []
-    //        let result = realm.objects(GameDataModel.self)
-    //
-    //
-    //        data = Array(result)
-    //        print(data[0], "テストです")
-    //
-    //    }
-    
+    //初期化
     init() {
         super.init(nibName: String(describing: StartGameViewController.self), bundle: nil)
     }
@@ -234,9 +205,9 @@ class StartGameViewController: UIViewController {
         if test2 {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "＜戻る", style: .plain, target: self, action: #selector(didTapBackButton))
         }else {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(didTapSaveButton))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "リセット", style: .plain, target: self, action: #selector(didTapResetButton))
-    }
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(didTapSaveButton))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "リセット", style: .plain, target: self, action: #selector(didTapResetButton))
+        }
     }
     //    colectionViewをセット
     func setCollectionViews() {
@@ -258,6 +229,7 @@ class StartGameViewController: UIViewController {
         collectionView3!.register(nib3, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader")
     }
     
+    //    未入力スコアがあるかチェック
     func checkScore()-> Bool {
         
         let nonNilCount = scoreData.reduce(0) { count, row in
@@ -265,18 +237,17 @@ class StartGameViewController: UIViewController {
         }
         return nonNilCount % 4 != 0
     }
-    
+    //    重複するメンバーがいるかチェック
     func hasDuplicates() -> Bool {
         let stringArray = matchMember.map { $0.userName }
         
         let set = Set(stringArray)
-        print(set.count)
-        print(stringArray.count)
         return set.count != stringArray.count
         
     }
     
     // todo リファクタリング可能　for in　文以外で
+    //    未入力の対局者がいるかチェック
     func checkMemberData() -> Bool {
         for i in 1 ... matchMember.count {
             if matchMember[i - 1].userName == "" {
@@ -446,10 +417,11 @@ extension StartGameViewController {
             // トータルデータ
             record.totalScoreData.append(objectsIn: totalScoreData)
             realm.add(record)
- //print(record)
+            //print(record)
         }
     }
     
+    //    UserMasterDataModelのrealm保存
     private func saveTestData() {
         let realm = try! Realm()
         var testData = [[Int]]()
@@ -482,47 +454,47 @@ extension StartGameViewController {
             let column = index / 4
             memberRankData[row][column] = score
         }
-        
-        let memberScoreData = memberScore.filter { array in
-            !array.allSatisfy { $0 == 0 }
-        }
-    //    print("\(memberRankData)はメンバー毎の順位配列")
-    //    print("\(memberScoreData)はメンバー毎のスコア配列")
-        
         //対局データを保存
-        matchMember.enumerated().forEach {index, data in
-            let targetEmployee = realm.objects(UserMasterDataModel.self).filter{ $0.id == data.id }
-            do{
-                try realm.write{
-                    if let userMasterScoreDataModel = targetEmployee.first {
-                        userMasterScoreDataModel.userMasterScore?.matchCount += memberRankData.count
-                        userMasterScoreDataModel.userMasterScore?.score += memberScoreData[index].reduce(0, +)
-                        userMasterScoreDataModel.userMasterScore?.chip += memberChipData[index]
-                        
-                        let memberRank = memberRankData[index]
-                        for rank in memberRank {
-                            switch rank {
-                            case 1:
-                                userMasterScoreDataModel.userMasterScore?.rank?.firstPlace += 1
-                            case 2:
-                                userMasterScoreDataModel.userMasterScore?.rank?.secondPlace += 1
-                            case 3:
-                                userMasterScoreDataModel.userMasterScore?.rank?.thirdPlace += 1
-                            case 4:
-                                userMasterScoreDataModel.userMasterScore?.rank?.firstPlace += 1
-                            default:
-                                print("Error")
-                            }
-                        }
-                        
-                        realm.add(userMasterScoreDataModel)
-   //                     print(userMasterScoreDataModel)//
-   //                     print("\(userMasterScoreDataModel.userMasterScore?.rank?.firstPlace ?? 0)は一位の追加回数")
-    //                    print("\(memberRank)メンバーランク")
+        matchMember.enumerated().forEach { index, data in
+            guard let targetEmployee = realm.objects(UserMasterDataModel.self).filter({ $0.id == data.id }).first else {
+                return
+            }
+            
+            try! realm.write {
+                let userMasterScoreDataModel = UserMasterScoreDataModel()
+                let userMasterRankDataModel = UserMasterRankDataModel()
+                //                        対局数をカウント
+                userMasterScoreDataModel.matchCount += memberRankData[0].count
+                //                        スコアの合計値を表示
+                userMasterScoreDataModel.score += memberScore[index].reduce(0, +)
+                //                        チップを表示
+                userMasterScoreDataModel.chip += memberChipData[index]
+                //                        総合計を表示
+                userMasterScoreDataModel.total += totalData[index]
+                
+                //                        着順毎にカウント
+                let memberRank = memberRankData[index]
+                for rank in memberRank {
+                    switch rank {
+                    case 1:
+                        userMasterRankDataModel.firstPlace += 1
+                    case 2:
+                        userMasterRankDataModel.secondPlace += 1
+                    case 3:
+                        userMasterRankDataModel.thirdPlace += 1
+                    case 4:
+                        userMasterRankDataModel.forthPlace += 1
+                    default:
+                        print("Error: Invalid rank")
                     }
                 }
-            }catch {
-                print("Error \(error)")
+                userMasterScoreDataModel.rank = userMasterRankDataModel
+                targetEmployee.userMasterScore = userMasterScoreDataModel
+                realm.add(targetEmployee)
+                print("\(targetEmployee)レルム保存")
+                print("\(memberRankData)順位データ")
+                print("\(memberScore)メンバースコア")
+                
             }
         }
     }
@@ -541,6 +513,7 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
             let addChipData = ChipDataModel()
             addChipData.chip = score
             chipData[index] = addChipData
+            memberChipData[index] = score
             
         case .score:
             let rowIndex = index / 4
@@ -613,7 +586,7 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
                     // B列の合計を計算する(左から2番目)
                     b += score.score ?? 0
                     totalData[1] = b
-               case 2:
+                case 2:
                     // C列の合計を計算する(左から3番目)
                     c += score.score ?? 0
                     totalData[2] = c
@@ -707,17 +680,9 @@ extension StartGameViewController: UICollectionViewDataSource {
         if collectionView.tag == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! StartGameCollectionViewCell
             cell.setborderColor()
-            //           cell.editLabel()
             let username = matchMember[indexPath.row].userName
             /// usernemeが空文字のときはサンプルメンバーを使う.
             cell.setText(username.isEmpty ? sampleMember[indexPath.row] : username )
-            //                let memberData = MemberDataModel()
-            //                let a = MemberViewController()
-            //                a.setUserData()
-            //                let username2 = memberData.memberName
-            //                cell.setText(username2)
-            //                cell.setBackgroundColor(.lightGray)
-            
             return cell
             
         } else if collectionView.tag == 2 {
@@ -738,7 +703,6 @@ extension StartGameViewController: UICollectionViewDataSource {
             cell.inputScore.inputAccessoryView = toolBar
             cell.delegate = self
             cell.deletText()
-            print("cellhyouzi")
             if let gameScoreType = GameScoreType(rawValue: indexPath.section) {
                 cell.setUp(index: indexPath.row, gameScoreType: gameScoreType, label: convertScore(type: gameScoreType, index: indexPath.row), check: test
                            
@@ -749,8 +713,8 @@ extension StartGameViewController: UICollectionViewDataSource {
     }
     
     //    対局者を決定
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath, test: Bool) {
-        if collectionView.tag == 0 && indexPath.section == 0 && test  {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView.tag == 0 && indexPath.section == 0 && self.test  {
             let vc = SelectUserViewController()
             vc.index = indexPath
             vc.delegate = self
@@ -759,25 +723,20 @@ extension StartGameViewController: UICollectionViewDataSource {
         }else {
         }
     }
-    
-    //    セクションのタイトルを設定
-    //    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-    //        if collectionView.tag == 0 {
-    //            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader", for: indexPath) as! TestCollectionReusableView
-    //            header.sectionLabel.text = collectionViewSection[indexPath.section]
-    //
-    //            return header
-    //        }else if collectionView2.tag == 1 {
-    //            let header = collectionView2.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader", for: indexPath) as! TestCollectionReusableView
-    //            header.sectionLabel.text = collectionViewSection2[indexPath.section]
-    //            return header
-    //        }else if collectionView2.tag == 2 {
-    //            let header = collectionView3.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader", for: indexPath) as! TestCollectionReusableView
-    //            header.sectionLabel.text = collectionViewSection3[indexPath.section]
-    //            return header
-    //        }
-    //        return UICollectionReusableView()
-    //    }
+    //  セクションのタイトルを設定
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeader", for: indexPath) as! TestCollectionReusableView
+        
+        if collectionView.tag == 0 {
+            header.sectionLabel.text = collectionViewSection[indexPath.section]
+        } else if collectionView.tag == 1 {
+            header.sectionLabel.text = collectionViewSection2[indexPath.section]
+        } else if collectionView.tag == 2 {
+            header.sectionLabel.text = collectionViewSection3[indexPath.section]
+        }
+        
+        return header
+    }
 }
 
 extension StartGameViewController: UICollectionViewDelegateFlowLayout {

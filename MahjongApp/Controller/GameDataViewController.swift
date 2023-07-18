@@ -22,7 +22,6 @@ class GameDataViewController: UIViewController {
             UINib(nibName: "GameDataTableViewCell", bundle: nil), forCellReuseIdentifier: "GameDataTableViewCell")
         setNavigationBarButton()
         self.title = "履歴"
-        //        navigationController?.navigationBar.prefersLargeTitles = true
         tableView.reloadData()
         setGameData()
         
@@ -40,15 +39,12 @@ class GameDataViewController: UIViewController {
         let realm = try! Realm()
         let result2 = realm.objects(GameDataModel.self)
         gameDataList = Array(result2)
-        
     }
-    
 }
 
 extension GameDataViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return gameDataList.count
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -79,7 +75,6 @@ extension GameDataViewController: UITableViewDataSource {
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
         dateFormatter.dateFormat = "yyyy年MM月dd日"
-        
         let date = dateFormatter.string(from: a)
         cell.gameData.text = "\(date)"
         return cell
@@ -110,6 +105,5 @@ extension GameDataViewController: UITableViewDelegate {
         vc.histryDataModel = gameDataList[indexPath.row]
         tableView.deselectRow(at: indexPath, animated: true)
         navigationController?.pushViewController(vc, animated: true)
-        
     }
 }

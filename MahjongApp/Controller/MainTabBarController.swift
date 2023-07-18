@@ -9,12 +9,6 @@ import UIKit
 
 class MainTabBarController: UITabBarController {
     
-    //    var myTabBar = UITabBar()
-    //
-    //    let width = UITabBar.view.frame.width
-    //    let height = UITabBar.view.frame.height
-    //    let tabBarHeight:CGFloat = 49
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         //        myTabBar.delegate = self
@@ -31,15 +25,15 @@ class MainTabBarController: UITabBarController {
         let memberViewNav = UINavigationController(rootViewController: memberViewController)
 //        let checkerViewController = CheckerViewController()
 //        let checkerViewNav = UINavigationController(rootViewController: checkerViewController)
-        let systemViewController = SystemViewController()
-        let systemViewNav = UINavigationController(rootViewController: systemViewController)
+//        let systemViewController = SystemViewController()
+//        let systemViewNav = UINavigationController(rootViewController: systemViewController)
         
         startGameViewController.tabBarItem = UITabBarItem(title: "対局！", image: UIImage(named: "startGameIcon"), tag: 1)
         gameDataViewController.tabBarItem = UITabBarItem(title: "履歴", image: UIImage(named: "gameDataIcon"), tag: 2)
         memberViewController.tabBarItem = UITabBarItem(title: "面子", image: UIImage(named: "memberIcon"), tag: 3)
 //        checkerViewController.tabBarItem = UITabBarItem(title: "チェッカー", image: UIImage(named: "checkIcon"), tag: 4)
-        systemViewController.tabBarItem = UITabBarItem(title: "設定", image: UIImage(named: "systemIcon"), tag: 5)
-        viewControllers = [startGameViewNav,gameDataViewNav,memberViewNav,systemViewNav]
+//        systemViewController.tabBarItem = UITabBarItem(title: "設定", image: UIImage(named: "systemIcon"), tag: 5)
+        viewControllers = [startGameViewNav,gameDataViewNav,memberViewNav]
         
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.backgroundColor = UIColor(red: 244/255, green: 178/255, blue: 64/255, alpha: 1.0)

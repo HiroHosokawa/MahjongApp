@@ -19,12 +19,6 @@ class StartGameCollectionViewCell3: UICollectionViewCell {
         
     }
     
-    
-//    func editLabel2() {
-//        let label = UILabel()
-//        label.frame = CGRect(x: 0, y: 0, width: 15, height: 15);_
-//    }
-    
     func deletText() {
         totalName.text = ""
         //ラベルの高さ処理
@@ -39,7 +33,6 @@ class StartGameCollectionViewCell3: UICollectionViewCell {
         totalName.layer.borderWidth = 1
         
     }
-    
     
     func setText2(_ text: String?) {
         totalName.text = text

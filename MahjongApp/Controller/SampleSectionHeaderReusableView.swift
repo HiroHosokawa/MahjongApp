@@ -8,9 +8,6 @@
 import Foundation
 import UIKit
 
-
 class SampleSectionHeaderReusableView: UICollectionReusableView {
     @IBOutlet weak var sectionHeader: UILabel!
-    
-    
 }

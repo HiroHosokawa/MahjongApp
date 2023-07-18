@@ -35,7 +35,7 @@
                     </collectionViewFlowLayout>
                 </collectionView>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="7uc-5P-ptc">
-                    <rect key="frame" x="0.0" y="254" width="414" height="608"/>
+                    <rect key="frame" x="0.0" y="224" width="414" height="638"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Mtv-nM-bKv">
                         <size key="itemSize" width="128" height="128"/>
@@ -45,7 +45,7 @@
                     </collectionViewFlowLayout>
                 </collectionView>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="0Ew-8E-5OI">
-                    <rect key="frame" x="0.0" y="149" width="414" height="85"/>
+                    <rect key="frame" x="0.0" y="134" width="414" height="85"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="85" id="2bC-LR-hmA"/>
@@ -71,8 +71,8 @@
                 <constraint firstItem="JGW-wu-dqX" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="OGU-Yh-XZ2"/>
                 <constraint firstItem="JGW-wu-dqX" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Xjg-O4-Dbt"/>
                 <constraint firstItem="7uc-5P-ptc" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="gN9-0Z-rQn"/>
-                <constraint firstItem="7uc-5P-ptc" firstAttribute="top" secondItem="0Ew-8E-5OI" secondAttribute="bottom" constant="20" id="j89-DX-crG"/>
-                <constraint firstItem="0Ew-8E-5OI" firstAttribute="top" secondItem="JGW-wu-dqX" secondAttribute="bottom" constant="20" id="uCV-yT-hQC"/>
+                <constraint firstItem="7uc-5P-ptc" firstAttribute="top" secondItem="0Ew-8E-5OI" secondAttribute="bottom" constant="5" id="j89-DX-crG"/>
+                <constraint firstItem="0Ew-8E-5OI" firstAttribute="top" secondItem="JGW-wu-dqX" secondAttribute="bottom" constant="5" id="uCV-yT-hQC"/>
                 <constraint firstItem="0Ew-8E-5OI" firstAttribute="leading" secondItem="JGW-wu-dqX" secondAttribute="leading" id="uGv-17-ae9"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="67.633928571428569"/>

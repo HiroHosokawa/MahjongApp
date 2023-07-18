@@ -25,6 +25,8 @@ class UserMasterScoreDataModel: Object {
     @Persisted var matchCount: Int = 0
     /// スコア.
     @Persisted var score: Int = 0
+    ///合計
+    @Persisted var total: Int = 0
     /// チップ.
     @Persisted var chip: Int = 0
     /// ランク.

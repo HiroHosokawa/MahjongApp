@@ -11,7 +11,6 @@ import RealmSwift
 
 var addButtonItem: UIBarButtonItem!
 
-
 class MemberViewController: UIViewController {
     
     var userDataList: [UserMasterDataModel] = []
@@ -28,7 +27,6 @@ class MemberViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setUserData()
-        
     }
     
     func setNavigationBarButton() {

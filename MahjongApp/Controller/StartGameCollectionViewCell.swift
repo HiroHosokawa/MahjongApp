@@ -16,14 +16,6 @@ class StartGameCollectionViewCell: UICollectionViewCell {
         setborderColor()
     }
     
-    //    func editLabel() {
-    //        let label = UILabel()
-    //        let startGameViewController = StartGameViewController()
-    //        let rabelHight = matchName.layer.bounds.width / 15
-    //
-    //        let rabelWidth = matchName.layer.bounds.width / CGFloat(startGameViewController.matchMember.count)
-    //    }
-    
     func setborderColor() {
         let borderColor = UIColor(red: 0.0/255, green: 0.0/255, blue: 0.0/255, alpha: 1.0).cgColor
         matchName.layer.borderColor = borderColor
