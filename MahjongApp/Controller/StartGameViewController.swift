@@ -40,13 +40,13 @@ class StartGameViewController: UIViewController {
     /// チップのデータ.
     var chipData = [ChipDataModel](repeating: .init(), count: 4)
     /// スコアのデータ.
-    var scoreData = [[ScoreDataModel]](repeating: [ScoreDataModel](repeating: .init(), count: 4), count: 10)
+    var scoreData = [[ScoreDataModel]](repeating: [ScoreDataModel](repeating: .init(), count: 4), count: 30)
     //対局者毎のスコア
-    private var memberScore = [[Int]](repeating: [Int](repeating: .init(), count: 10), count: 4)
+    private var memberScore = [[Int]](repeating: [Int](repeating: .init(), count: 30), count: 4)
     //対局者毎のチップ
     var memberChipData = [Int](repeating: .init(), count: 4)
     //対局者の順位づけに必要なデータ
-    private var rankData = [[Int]](repeating: [Int](repeating: .init(), count: 4), count: 10)
+    private var rankData = [[Int]](repeating: [Int](repeating: .init(), count: 4), count: 30)
     //ツールバー
     var toolBar: UIToolbar {
         let toolBarRect = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35)
@@ -103,7 +103,7 @@ class StartGameViewController: UIViewController {
     }
     
     func test(data: GameDataModel) -> [[ScoreDataModel]] {
-        var score = [[ScoreDataModel]](repeating: [ScoreDataModel](repeating: .init(), count: 4), count: 10)
+        var score = [[ScoreDataModel]](repeating: [ScoreDataModel](repeating: .init(), count: 4), count: 30)
         
         data.scoreData.enumerated().forEach { index, data in
             let row = index / 4
@@ -114,74 +114,11 @@ class StartGameViewController: UIViewController {
         return score
     }
     
-    //閲覧用のデータを表示
-    //    func setViewData(){
-    //        if test {
-    //            let index = self.index!.row
-    //
-    //
-    //            let realm = try! Realm()
-    //            let gameData = realm.objects(GameDataModel.self)
-    //
-    //            //Listを配列に変換
-    //            let userNamesArray = Array(gameData[index].userNames)
-    //            let chipDataArray = Array(gameData[index].chipData)
-    //            let scoreDataArray = Array(gameData[index].scoreData)
-    //            let totalScoreDataArray = Array(gameData[index].totalScoreData)
-    //            let intTotalDataArray = totalScoreDataArray.map { $0.score ?? 0 }
-    //
-    //            //対局者の型変換
-    //            var memberArray: [UserMasterDataModel] = []
-    //            for memberDataModel in userNamesArray {
-    //                let userMasterDataModel = UserMasterDataModel()
-    //                userMasterDataModel.userName = memberDataModel.memberName
-    //                memberArray.append(userMasterDataModel)
-    //            }
-    //            //スコアの型変換
-    //            var scoreArray: [[ScoreDataModel]] = [[]]
-    //            for rowIndex in 0..<10 {
-    //                var row: [ScoreDataModel] = []
-    //                for columnIndex in 0..<4 {
-    //                    let index = rowIndex * 10 + columnIndex
-    //                    if index < scoreDataArray.count {
-    //                        let element = scoreDataArray[index]
-    //                        row.append(element)
-    //                    }
-    //                }
-    //                scoreArray.append(row)
-    //
-    //            }
-    //
-    //            //日付を表示
-    //            let dateFormatter = DateFormatter()
-    //            dateFormatter.calendar = Calendar(identifier: .gregorian)
-    //            dateFormatter.locale = Locale(identifier: "ja_JP")
-    //            dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
-    //            dateFormatter.dateFormat = "yyyy年MM月dd日"
-    //            let date = dateFormatter.string(from: gameData[index].date)
-    //            self.title = "\(date)"
-    //
-    //            //初期値をrealmから取得したデータに変換して表示
-    //            self.chipData = chipDataArray
-    ////            self.scoreData = scoreArray
-    //            self.totalData = intTotalDataArray
-    //            self.matchMember = memberArray
-    //
-    //            self.collectionView2.reloadData()
-    //            self.collectionView.reloadData()
-    //
-    //            //              print(gameData)
-    //            //             print("\(a)が渡されたインデックス番号")
-    //            //TODOスコアデータを行列に変換、対局者をuserMasterData型に変換
-    //
-    //        }
-    //    }
-    
     //リセット機能の実装
     func resetData() {
         //        let startGameCollectionViewCell = StartGameCollectionViewCell()
         self.matchMember = [UserMasterDataModel](repeating: .init(), count: 4)
-        self.scoreData = [[ScoreDataModel]](repeating: [ScoreDataModel](repeating: .init(), count: 4), count: 10)
+        self.scoreData = [[ScoreDataModel]](repeating: [ScoreDataModel](repeating: .init(), count: 4), count: 30)
         self.chipData = [ChipDataModel](repeating: .init(), count: 4)
         self.totalData = [Int](repeating: 0, count: 4)
         // UICollectionViewをリロードする
@@ -302,7 +239,6 @@ class StartGameViewController: UIViewController {
                 })
             alert.addAction(ok);
             self.present(alert, animated: true, completion: nil)
-            //                   print(hasDuplicates(array: matchMember))
         }else {
             
             let alert = UIAlertController(
@@ -318,8 +254,6 @@ class StartGameViewController: UIViewController {
                     self.saveRecord()
                     self.saveTestData()
                     self.resetData()
-                    //                    setRankScore()
-                    //                    print(totalData)
                     let vc = GameDataViewController()
                     navigationController?.pushViewController(vc, animated: true)
                 })
@@ -417,7 +351,6 @@ extension StartGameViewController {
             // トータルデータ
             record.totalScoreData.append(objectsIn: totalScoreData)
             realm.add(record)
-            //print(record)
         }
     }
     
@@ -454,50 +387,69 @@ extension StartGameViewController {
             let column = index / 4
             memberRankData[row][column] = score
         }
-        //対局データを保存
-        matchMember.enumerated().forEach { index, data in
-            guard let targetEmployee = realm.objects(UserMasterDataModel.self).filter({ $0.id == data.id }).first else {
-                return
-            }
-            
-            try! realm.write {
-                let userMasterScoreDataModel = UserMasterScoreDataModel()
-                let userMasterRankDataModel = UserMasterRankDataModel()
-                //                        対局数をカウント
-                userMasterScoreDataModel.matchCount += memberRankData[0].count
-                //                        スコアの合計値を表示
-                userMasterScoreDataModel.score += memberScore[index].reduce(0, +)
-                //                        チップを表示
-                userMasterScoreDataModel.chip += memberChipData[index]
-                //                        総合計を表示
-                userMasterScoreDataModel.total += totalData[index]
-                
-                //                        着順毎にカウント
-                let memberRank = memberRankData[index]
-                for rank in memberRank {
-                    switch rank {
-                    case 1:
-                        userMasterRankDataModel.firstPlace += 1
-                    case 2:
-                        userMasterRankDataModel.secondPlace += 1
-                    case 3:
-                        userMasterRankDataModel.thirdPlace += 1
-                    case 4:
-                        userMasterRankDataModel.forthPlace += 1
-                    default:
-                        print("Error: Invalid rank")
+        // 対局データを保存
+            matchMember.enumerated().forEach { index, data in
+                guard let targetEmployee = realm.objects(UserMasterDataModel.self).filter({ $0.id == data.id }).first else {
+                    return
+                }
+
+                // ユーザーマスタースコアが存在する場合に更新、なければ新規作成
+                if let userMasterScoreDataModel = targetEmployee.userMasterScore {
+                    try! realm.write {
+                        // 既存のデータを更新する
+                        userMasterScoreDataModel.matchCount += memberRankData[0].count
+                        userMasterScoreDataModel.score += memberScore[index].reduce(0, +)
+                        userMasterScoreDataModel.chip += memberChipData[index]
+                        userMasterScoreDataModel.total += totalData[index]
+
+                        let memberRank = memberRankData[index]
+                        for rank in memberRank {
+                            switch rank {
+                            case 1:
+                                userMasterScoreDataModel.rank?.firstPlace += 1
+                            case 2:
+                                userMasterScoreDataModel.rank?.secondPlace += 1
+                            case 3:
+                                userMasterScoreDataModel.rank?.thirdPlace += 1
+                            case 4:
+                                userMasterScoreDataModel.rank?.forthPlace += 1
+                            default:
+                                print("Error: Invalid rank")
+                            }
+                        }
+                    }
+                } else {
+                    try! realm.write {
+                        // ユーザーマスタースコアがない場合に新規作成する
+                        let userMasterScoreDataModel = UserMasterScoreDataModel()
+                        userMasterScoreDataModel.matchCount = memberRankData[0].count
+                        userMasterScoreDataModel.score = memberScore[index].reduce(0, +)
+                        userMasterScoreDataModel.chip = memberChipData[index]
+                        userMasterScoreDataModel.total = totalData[index]
+
+                        let userMasterRankDataModel = UserMasterRankDataModel()
+                        let memberRank = memberRankData[index]
+                        for rank in memberRank {
+                            switch rank {
+                            case 1:
+                                userMasterRankDataModel.firstPlace += 1
+                            case 2:
+                                userMasterRankDataModel.secondPlace += 1
+                            case 3:
+                                userMasterRankDataModel.thirdPlace += 1
+                            case 4:
+                                userMasterRankDataModel.forthPlace += 1
+                            default:
+                                print("Error: Invalid rank")
+                            }
+                        }
+                        userMasterScoreDataModel.rank = userMasterRankDataModel
+                        targetEmployee.userMasterScore = userMasterScoreDataModel
+                        realm.add(targetEmployee)
                     }
                 }
-                userMasterScoreDataModel.rank = userMasterRankDataModel
-                targetEmployee.userMasterScore = userMasterScoreDataModel
-                realm.add(targetEmployee)
-                print("\(targetEmployee)レルム保存")
-                print("\(memberRankData)順位データ")
-                print("\(memberScore)メンバースコア")
-                
             }
         }
-    }
 }
 
 /// 各チップもしくはスコアの入力が終わると呼ばれる.
@@ -526,7 +478,6 @@ extension StartGameViewController: StartGamerViewControllerCell2Delegate {
             // 行毎の数字を自動入力する実装
             handleMissingScore(index: index)
             //           checkTest(index: index)
-            //            print(memberScore[2][1])
         }
         // ゲームスコアの計算をする
         gameScoreCalculation(index: index)
@@ -663,7 +614,7 @@ extension StartGameViewController: UICollectionViewDataSource {
             case 0:
                 return chipData.count
             case 1:
-                return matchMember.count * 10
+                return matchMember.count * 30
             default:
                 print("error")
                 return 0

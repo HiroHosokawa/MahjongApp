@@ -126,7 +126,7 @@ extension MemberViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
         let vc = ScoreViewController()
         let index = indexPath.row
         let member = userDataList[index]

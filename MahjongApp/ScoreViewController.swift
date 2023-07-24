@@ -14,8 +14,8 @@ class ScoreViewController: UIViewController {
     var member: UserMasterDataModel?
     var dataItem: [String] = ["2023年○月○日"]
     var score: [String] = ["合計","素点","チップ"]
-    var rank: [String] = ["対局数","１着◯回　1位立◯％","2着◯回　2位立◯％","3着◯回　3位立◯％","4着◯回　4位立◯％"]
-    var scoreSection: [String] = ["作成日","スコア","順位"]
+    var rank: [String] = ["対局数","平均着順","１着◯回　1位率◯％","2着◯回　2位率◯％","3着◯回　3位率◯％","4着◯回　4位率◯％"]
+    var scoreSection: [String] = ["更新日","スコア","順位"]
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -36,16 +36,17 @@ class ScoreViewController: UIViewController {
         score[1] = "素点: \(member?.userMasterScore?.score ?? 0)"
         score[2] = "チップ: \(member?.userMasterScore?.chip ?? 0)"
         
-        let gameCount = Float(member?.userMasterScore?.matchCount ?? 0)
-        let first = Float(member?.userMasterScore?.rank?.firstPlace ?? 0)
-        let second = Float(member?.userMasterScore?.rank?.secondPlace ?? 0)
-        let third = Float(member?.userMasterScore?.rank?.thirdPlace ?? 0)
-        let forth = Float(member?.userMasterScore?.rank?.forthPlace ?? 0)
+        let gameCount = Float16(member?.userMasterScore?.matchCount ?? 0)
+        let first = Float16(member?.userMasterScore?.rank?.firstPlace ?? 0)
+        let second = Float16(member?.userMasterScore?.rank?.secondPlace ?? 0)
+        let third = Float16(member?.userMasterScore?.rank?.thirdPlace ?? 0)
+        let forth = Float16(member?.userMasterScore?.rank?.forthPlace ?? 0)
         rank[0] = "総対局数:  \(member?.userMasterScore?.matchCount ?? 0)局"
-        rank[1] = "１着: \(member?.userMasterScore?.rank?.firstPlace ?? 0)回　1位率: \(first / gameCount * 100)％"
-        rank[2] = "2着: \(member?.userMasterScore?.rank?.secondPlace ?? 0)回　2位率: \(second / gameCount * 100)％"
-        rank[3] = "3着: \(member?.userMasterScore?.rank?.thirdPlace ?? 0)回　3位率: \(third / gameCount * 100)％"
-        rank[4] = "4着: \(member?.userMasterScore?.rank?.forthPlace ?? 0)回　4位率: \(forth / gameCount * 100)％"
+        rank[1] = "平均順位: \((first + (second * 2) + (third * 3) + (forth * 4)) / gameCount)"
+        rank[2] = "1位: \(member?.userMasterScore?.rank?.firstPlace ?? 0)回　1位率: \(first / gameCount * 100)％"
+        rank[3] = "2位: \(member?.userMasterScore?.rank?.secondPlace ?? 0)回　2位率: \(second / gameCount * 100)％"
+        rank[4] = "3位: \(member?.userMasterScore?.rank?.thirdPlace ?? 0)回　3位率: \(third / gameCount * 100)％"
+        rank[5] = "4位: \(member?.userMasterScore?.rank?.forthPlace ?? 0)回　4位率: \(forth / gameCount * 100)％"
         //日付表示
         guard let a = member?.date else { return  }
         let dateFormatter = DateFormatter()
